@@ -5,21 +5,53 @@ Grammar
 Rule 0     S' -> program
 Rule 1     program -> command
 Rule 2     program -> program command
-Rule 3     command -> forward INT
-Rule 4     command -> fd INT
-Rule 5     length -> INT
+Rule 3     command -> forward NUMBER
+Rule 4     command -> fd NUMBER
+Rule 5     command -> right NUMBER
+Rule 6     command -> rt NUMBER
+Rule 7     command -> backward NUMBER
+Rule 8     command -> bk NUMBER
+Rule 9     command -> left NUMBER
+Rule 10    command -> lt NUMBER
+Rule 11    command -> setpos [ NUMBER NUMBER ]
+Rule 12    command -> setxy NUMBER NUMBER
+Rule 13    command -> setx NUMBER
+Rule 14    command -> sety NUMBER
+Rule 15    command -> home
+Rule 16    command -> pendown
+Rule 17    command -> pd
+Rule 18    command -> penup
+Rule 19    command -> pu
+Rule 20    command -> setpencolor [ NUMBER NUMBER NUMBER ]
 
 Terminals, with rules where they appear
 
-INT                  : 3 4 5
+NUMBER               : 3 4 5 6 7 8 9 10 11 11 12 12 13 14 20 20 20
+[                    : 11 20
+]                    : 11 20
+backward             : 7
+bk                   : 8
 error                : 
 fd                   : 4
 forward              : 3
+home                 : 15
+left                 : 9
+lt                   : 10
+pd                   : 17
+pendown              : 16
+penup                : 18
+pu                   : 19
+right                : 5
+rt                   : 6
+setpencolor          : 20
+setpos               : 11
+setx                 : 13
+setxy                : 12
+sety                 : 14
 
 Nonterminals, with rules where they appear
 
 command              : 1 2
-length               : 
 program              : 2 0
 
 Parsing method: LALR
@@ -29,11 +61,43 @@ state 0
     (0) S' -> . program
     (1) program -> . command
     (2) program -> . program command
-    (3) command -> . forward INT
-    (4) command -> . fd INT
+    (3) command -> . forward NUMBER
+    (4) command -> . fd NUMBER
+    (5) command -> . right NUMBER
+    (6) command -> . rt NUMBER
+    (7) command -> . backward NUMBER
+    (8) command -> . bk NUMBER
+    (9) command -> . left NUMBER
+    (10) command -> . lt NUMBER
+    (11) command -> . setpos [ NUMBER NUMBER ]
+    (12) command -> . setxy NUMBER NUMBER
+    (13) command -> . setx NUMBER
+    (14) command -> . sety NUMBER
+    (15) command -> . home
+    (16) command -> . pendown
+    (17) command -> . pd
+    (18) command -> . penup
+    (19) command -> . pu
+    (20) command -> . setpencolor [ NUMBER NUMBER NUMBER ]
 
     forward         shift and go to state 3
     fd              shift and go to state 4
+    right           shift and go to state 5
+    rt              shift and go to state 6
+    backward        shift and go to state 7
+    bk              shift and go to state 8
+    left            shift and go to state 9
+    lt              shift and go to state 10
+    setpos          shift and go to state 11
+    setxy           shift and go to state 12
+    setx            shift and go to state 13
+    sety            shift and go to state 14
+    home            shift and go to state 15
+    pendown         shift and go to state 16
+    pd              shift and go to state 17
+    penup           shift and go to state 18
+    pu              shift and go to state 19
+    setpencolor     shift and go to state 20
 
     program                        shift and go to state 1
     command                        shift and go to state 2
@@ -42,13 +106,45 @@ state 1
 
     (0) S' -> program .
     (2) program -> program . command
-    (3) command -> . forward INT
-    (4) command -> . fd INT
+    (3) command -> . forward NUMBER
+    (4) command -> . fd NUMBER
+    (5) command -> . right NUMBER
+    (6) command -> . rt NUMBER
+    (7) command -> . backward NUMBER
+    (8) command -> . bk NUMBER
+    (9) command -> . left NUMBER
+    (10) command -> . lt NUMBER
+    (11) command -> . setpos [ NUMBER NUMBER ]
+    (12) command -> . setxy NUMBER NUMBER
+    (13) command -> . setx NUMBER
+    (14) command -> . sety NUMBER
+    (15) command -> . home
+    (16) command -> . pendown
+    (17) command -> . pd
+    (18) command -> . penup
+    (19) command -> . pu
+    (20) command -> . setpencolor [ NUMBER NUMBER NUMBER ]
 
     forward         shift and go to state 3
     fd              shift and go to state 4
+    right           shift and go to state 5
+    rt              shift and go to state 6
+    backward        shift and go to state 7
+    bk              shift and go to state 8
+    left            shift and go to state 9
+    lt              shift and go to state 10
+    setpos          shift and go to state 11
+    setxy           shift and go to state 12
+    setx            shift and go to state 13
+    sety            shift and go to state 14
+    home            shift and go to state 15
+    pendown         shift and go to state 16
+    pd              shift and go to state 17
+    penup           shift and go to state 18
+    pu              shift and go to state 19
+    setpencolor     shift and go to state 20
 
-    command                        shift and go to state 5
+    command                        shift and go to state 21
 
 state 2
 
@@ -56,46 +152,643 @@ state 2
 
     forward         reduce using rule 1 (program -> command .)
     fd              reduce using rule 1 (program -> command .)
+    right           reduce using rule 1 (program -> command .)
+    rt              reduce using rule 1 (program -> command .)
+    backward        reduce using rule 1 (program -> command .)
+    bk              reduce using rule 1 (program -> command .)
+    left            reduce using rule 1 (program -> command .)
+    lt              reduce using rule 1 (program -> command .)
+    setpos          reduce using rule 1 (program -> command .)
+    setxy           reduce using rule 1 (program -> command .)
+    setx            reduce using rule 1 (program -> command .)
+    sety            reduce using rule 1 (program -> command .)
+    home            reduce using rule 1 (program -> command .)
+    pendown         reduce using rule 1 (program -> command .)
+    pd              reduce using rule 1 (program -> command .)
+    penup           reduce using rule 1 (program -> command .)
+    pu              reduce using rule 1 (program -> command .)
+    setpencolor     reduce using rule 1 (program -> command .)
     $end            reduce using rule 1 (program -> command .)
 
 
 state 3
 
-    (3) command -> forward . INT
+    (3) command -> forward . NUMBER
 
-    INT             shift and go to state 6
+    NUMBER          shift and go to state 22
 
 
 state 4
 
-    (4) command -> fd . INT
+    (4) command -> fd . NUMBER
 
-    INT             shift and go to state 7
+    NUMBER          shift and go to state 23
 
 
 state 5
+
+    (5) command -> right . NUMBER
+
+    NUMBER          shift and go to state 24
+
+
+state 6
+
+    (6) command -> rt . NUMBER
+
+    NUMBER          shift and go to state 25
+
+
+state 7
+
+    (7) command -> backward . NUMBER
+
+    NUMBER          shift and go to state 26
+
+
+state 8
+
+    (8) command -> bk . NUMBER
+
+    NUMBER          shift and go to state 27
+
+
+state 9
+
+    (9) command -> left . NUMBER
+
+    NUMBER          shift and go to state 28
+
+
+state 10
+
+    (10) command -> lt . NUMBER
+
+    NUMBER          shift and go to state 29
+
+
+state 11
+
+    (11) command -> setpos . [ NUMBER NUMBER ]
+
+    [               shift and go to state 30
+
+
+state 12
+
+    (12) command -> setxy . NUMBER NUMBER
+
+    NUMBER          shift and go to state 31
+
+
+state 13
+
+    (13) command -> setx . NUMBER
+
+    NUMBER          shift and go to state 32
+
+
+state 14
+
+    (14) command -> sety . NUMBER
+
+    NUMBER          shift and go to state 33
+
+
+state 15
+
+    (15) command -> home .
+
+    forward         reduce using rule 15 (command -> home .)
+    fd              reduce using rule 15 (command -> home .)
+    right           reduce using rule 15 (command -> home .)
+    rt              reduce using rule 15 (command -> home .)
+    backward        reduce using rule 15 (command -> home .)
+    bk              reduce using rule 15 (command -> home .)
+    left            reduce using rule 15 (command -> home .)
+    lt              reduce using rule 15 (command -> home .)
+    setpos          reduce using rule 15 (command -> home .)
+    setxy           reduce using rule 15 (command -> home .)
+    setx            reduce using rule 15 (command -> home .)
+    sety            reduce using rule 15 (command -> home .)
+    home            reduce using rule 15 (command -> home .)
+    pendown         reduce using rule 15 (command -> home .)
+    pd              reduce using rule 15 (command -> home .)
+    penup           reduce using rule 15 (command -> home .)
+    pu              reduce using rule 15 (command -> home .)
+    setpencolor     reduce using rule 15 (command -> home .)
+    $end            reduce using rule 15 (command -> home .)
+
+
+state 16
+
+    (16) command -> pendown .
+
+    forward         reduce using rule 16 (command -> pendown .)
+    fd              reduce using rule 16 (command -> pendown .)
+    right           reduce using rule 16 (command -> pendown .)
+    rt              reduce using rule 16 (command -> pendown .)
+    backward        reduce using rule 16 (command -> pendown .)
+    bk              reduce using rule 16 (command -> pendown .)
+    left            reduce using rule 16 (command -> pendown .)
+    lt              reduce using rule 16 (command -> pendown .)
+    setpos          reduce using rule 16 (command -> pendown .)
+    setxy           reduce using rule 16 (command -> pendown .)
+    setx            reduce using rule 16 (command -> pendown .)
+    sety            reduce using rule 16 (command -> pendown .)
+    home            reduce using rule 16 (command -> pendown .)
+    pendown         reduce using rule 16 (command -> pendown .)
+    pd              reduce using rule 16 (command -> pendown .)
+    penup           reduce using rule 16 (command -> pendown .)
+    pu              reduce using rule 16 (command -> pendown .)
+    setpencolor     reduce using rule 16 (command -> pendown .)
+    $end            reduce using rule 16 (command -> pendown .)
+
+
+state 17
+
+    (17) command -> pd .
+
+    forward         reduce using rule 17 (command -> pd .)
+    fd              reduce using rule 17 (command -> pd .)
+    right           reduce using rule 17 (command -> pd .)
+    rt              reduce using rule 17 (command -> pd .)
+    backward        reduce using rule 17 (command -> pd .)
+    bk              reduce using rule 17 (command -> pd .)
+    left            reduce using rule 17 (command -> pd .)
+    lt              reduce using rule 17 (command -> pd .)
+    setpos          reduce using rule 17 (command -> pd .)
+    setxy           reduce using rule 17 (command -> pd .)
+    setx            reduce using rule 17 (command -> pd .)
+    sety            reduce using rule 17 (command -> pd .)
+    home            reduce using rule 17 (command -> pd .)
+    pendown         reduce using rule 17 (command -> pd .)
+    pd              reduce using rule 17 (command -> pd .)
+    penup           reduce using rule 17 (command -> pd .)
+    pu              reduce using rule 17 (command -> pd .)
+    setpencolor     reduce using rule 17 (command -> pd .)
+    $end            reduce using rule 17 (command -> pd .)
+
+
+state 18
+
+    (18) command -> penup .
+
+    forward         reduce using rule 18 (command -> penup .)
+    fd              reduce using rule 18 (command -> penup .)
+    right           reduce using rule 18 (command -> penup .)
+    rt              reduce using rule 18 (command -> penup .)
+    backward        reduce using rule 18 (command -> penup .)
+    bk              reduce using rule 18 (command -> penup .)
+    left            reduce using rule 18 (command -> penup .)
+    lt              reduce using rule 18 (command -> penup .)
+    setpos          reduce using rule 18 (command -> penup .)
+    setxy           reduce using rule 18 (command -> penup .)
+    setx            reduce using rule 18 (command -> penup .)
+    sety            reduce using rule 18 (command -> penup .)
+    home            reduce using rule 18 (command -> penup .)
+    pendown         reduce using rule 18 (command -> penup .)
+    pd              reduce using rule 18 (command -> penup .)
+    penup           reduce using rule 18 (command -> penup .)
+    pu              reduce using rule 18 (command -> penup .)
+    setpencolor     reduce using rule 18 (command -> penup .)
+    $end            reduce using rule 18 (command -> penup .)
+
+
+state 19
+
+    (19) command -> pu .
+
+    forward         reduce using rule 19 (command -> pu .)
+    fd              reduce using rule 19 (command -> pu .)
+    right           reduce using rule 19 (command -> pu .)
+    rt              reduce using rule 19 (command -> pu .)
+    backward        reduce using rule 19 (command -> pu .)
+    bk              reduce using rule 19 (command -> pu .)
+    left            reduce using rule 19 (command -> pu .)
+    lt              reduce using rule 19 (command -> pu .)
+    setpos          reduce using rule 19 (command -> pu .)
+    setxy           reduce using rule 19 (command -> pu .)
+    setx            reduce using rule 19 (command -> pu .)
+    sety            reduce using rule 19 (command -> pu .)
+    home            reduce using rule 19 (command -> pu .)
+    pendown         reduce using rule 19 (command -> pu .)
+    pd              reduce using rule 19 (command -> pu .)
+    penup           reduce using rule 19 (command -> pu .)
+    pu              reduce using rule 19 (command -> pu .)
+    setpencolor     reduce using rule 19 (command -> pu .)
+    $end            reduce using rule 19 (command -> pu .)
+
+
+state 20
+
+    (20) command -> setpencolor . [ NUMBER NUMBER NUMBER ]
+
+    [               shift and go to state 34
+
+
+state 21
 
     (2) program -> program command .
 
     forward         reduce using rule 2 (program -> program command .)
     fd              reduce using rule 2 (program -> program command .)
+    right           reduce using rule 2 (program -> program command .)
+    rt              reduce using rule 2 (program -> program command .)
+    backward        reduce using rule 2 (program -> program command .)
+    bk              reduce using rule 2 (program -> program command .)
+    left            reduce using rule 2 (program -> program command .)
+    lt              reduce using rule 2 (program -> program command .)
+    setpos          reduce using rule 2 (program -> program command .)
+    setxy           reduce using rule 2 (program -> program command .)
+    setx            reduce using rule 2 (program -> program command .)
+    sety            reduce using rule 2 (program -> program command .)
+    home            reduce using rule 2 (program -> program command .)
+    pendown         reduce using rule 2 (program -> program command .)
+    pd              reduce using rule 2 (program -> program command .)
+    penup           reduce using rule 2 (program -> program command .)
+    pu              reduce using rule 2 (program -> program command .)
+    setpencolor     reduce using rule 2 (program -> program command .)
     $end            reduce using rule 2 (program -> program command .)
 
 
-state 6
+state 22
 
-    (3) command -> forward INT .
+    (3) command -> forward NUMBER .
 
-    forward         reduce using rule 3 (command -> forward INT .)
-    fd              reduce using rule 3 (command -> forward INT .)
-    $end            reduce using rule 3 (command -> forward INT .)
+    forward         reduce using rule 3 (command -> forward NUMBER .)
+    fd              reduce using rule 3 (command -> forward NUMBER .)
+    right           reduce using rule 3 (command -> forward NUMBER .)
+    rt              reduce using rule 3 (command -> forward NUMBER .)
+    backward        reduce using rule 3 (command -> forward NUMBER .)
+    bk              reduce using rule 3 (command -> forward NUMBER .)
+    left            reduce using rule 3 (command -> forward NUMBER .)
+    lt              reduce using rule 3 (command -> forward NUMBER .)
+    setpos          reduce using rule 3 (command -> forward NUMBER .)
+    setxy           reduce using rule 3 (command -> forward NUMBER .)
+    setx            reduce using rule 3 (command -> forward NUMBER .)
+    sety            reduce using rule 3 (command -> forward NUMBER .)
+    home            reduce using rule 3 (command -> forward NUMBER .)
+    pendown         reduce using rule 3 (command -> forward NUMBER .)
+    pd              reduce using rule 3 (command -> forward NUMBER .)
+    penup           reduce using rule 3 (command -> forward NUMBER .)
+    pu              reduce using rule 3 (command -> forward NUMBER .)
+    setpencolor     reduce using rule 3 (command -> forward NUMBER .)
+    $end            reduce using rule 3 (command -> forward NUMBER .)
 
 
-state 7
+state 23
 
-    (4) command -> fd INT .
+    (4) command -> fd NUMBER .
 
-    forward         reduce using rule 4 (command -> fd INT .)
-    fd              reduce using rule 4 (command -> fd INT .)
-    $end            reduce using rule 4 (command -> fd INT .)
+    forward         reduce using rule 4 (command -> fd NUMBER .)
+    fd              reduce using rule 4 (command -> fd NUMBER .)
+    right           reduce using rule 4 (command -> fd NUMBER .)
+    rt              reduce using rule 4 (command -> fd NUMBER .)
+    backward        reduce using rule 4 (command -> fd NUMBER .)
+    bk              reduce using rule 4 (command -> fd NUMBER .)
+    left            reduce using rule 4 (command -> fd NUMBER .)
+    lt              reduce using rule 4 (command -> fd NUMBER .)
+    setpos          reduce using rule 4 (command -> fd NUMBER .)
+    setxy           reduce using rule 4 (command -> fd NUMBER .)
+    setx            reduce using rule 4 (command -> fd NUMBER .)
+    sety            reduce using rule 4 (command -> fd NUMBER .)
+    home            reduce using rule 4 (command -> fd NUMBER .)
+    pendown         reduce using rule 4 (command -> fd NUMBER .)
+    pd              reduce using rule 4 (command -> fd NUMBER .)
+    penup           reduce using rule 4 (command -> fd NUMBER .)
+    pu              reduce using rule 4 (command -> fd NUMBER .)
+    setpencolor     reduce using rule 4 (command -> fd NUMBER .)
+    $end            reduce using rule 4 (command -> fd NUMBER .)
+
+
+state 24
+
+    (5) command -> right NUMBER .
+
+    forward         reduce using rule 5 (command -> right NUMBER .)
+    fd              reduce using rule 5 (command -> right NUMBER .)
+    right           reduce using rule 5 (command -> right NUMBER .)
+    rt              reduce using rule 5 (command -> right NUMBER .)
+    backward        reduce using rule 5 (command -> right NUMBER .)
+    bk              reduce using rule 5 (command -> right NUMBER .)
+    left            reduce using rule 5 (command -> right NUMBER .)
+    lt              reduce using rule 5 (command -> right NUMBER .)
+    setpos          reduce using rule 5 (command -> right NUMBER .)
+    setxy           reduce using rule 5 (command -> right NUMBER .)
+    setx            reduce using rule 5 (command -> right NUMBER .)
+    sety            reduce using rule 5 (command -> right NUMBER .)
+    home            reduce using rule 5 (command -> right NUMBER .)
+    pendown         reduce using rule 5 (command -> right NUMBER .)
+    pd              reduce using rule 5 (command -> right NUMBER .)
+    penup           reduce using rule 5 (command -> right NUMBER .)
+    pu              reduce using rule 5 (command -> right NUMBER .)
+    setpencolor     reduce using rule 5 (command -> right NUMBER .)
+    $end            reduce using rule 5 (command -> right NUMBER .)
+
+
+state 25
+
+    (6) command -> rt NUMBER .
+
+    forward         reduce using rule 6 (command -> rt NUMBER .)
+    fd              reduce using rule 6 (command -> rt NUMBER .)
+    right           reduce using rule 6 (command -> rt NUMBER .)
+    rt              reduce using rule 6 (command -> rt NUMBER .)
+    backward        reduce using rule 6 (command -> rt NUMBER .)
+    bk              reduce using rule 6 (command -> rt NUMBER .)
+    left            reduce using rule 6 (command -> rt NUMBER .)
+    lt              reduce using rule 6 (command -> rt NUMBER .)
+    setpos          reduce using rule 6 (command -> rt NUMBER .)
+    setxy           reduce using rule 6 (command -> rt NUMBER .)
+    setx            reduce using rule 6 (command -> rt NUMBER .)
+    sety            reduce using rule 6 (command -> rt NUMBER .)
+    home            reduce using rule 6 (command -> rt NUMBER .)
+    pendown         reduce using rule 6 (command -> rt NUMBER .)
+    pd              reduce using rule 6 (command -> rt NUMBER .)
+    penup           reduce using rule 6 (command -> rt NUMBER .)
+    pu              reduce using rule 6 (command -> rt NUMBER .)
+    setpencolor     reduce using rule 6 (command -> rt NUMBER .)
+    $end            reduce using rule 6 (command -> rt NUMBER .)
+
+
+state 26
+
+    (7) command -> backward NUMBER .
+
+    forward         reduce using rule 7 (command -> backward NUMBER .)
+    fd              reduce using rule 7 (command -> backward NUMBER .)
+    right           reduce using rule 7 (command -> backward NUMBER .)
+    rt              reduce using rule 7 (command -> backward NUMBER .)
+    backward        reduce using rule 7 (command -> backward NUMBER .)
+    bk              reduce using rule 7 (command -> backward NUMBER .)
+    left            reduce using rule 7 (command -> backward NUMBER .)
+    lt              reduce using rule 7 (command -> backward NUMBER .)
+    setpos          reduce using rule 7 (command -> backward NUMBER .)
+    setxy           reduce using rule 7 (command -> backward NUMBER .)
+    setx            reduce using rule 7 (command -> backward NUMBER .)
+    sety            reduce using rule 7 (command -> backward NUMBER .)
+    home            reduce using rule 7 (command -> backward NUMBER .)
+    pendown         reduce using rule 7 (command -> backward NUMBER .)
+    pd              reduce using rule 7 (command -> backward NUMBER .)
+    penup           reduce using rule 7 (command -> backward NUMBER .)
+    pu              reduce using rule 7 (command -> backward NUMBER .)
+    setpencolor     reduce using rule 7 (command -> backward NUMBER .)
+    $end            reduce using rule 7 (command -> backward NUMBER .)
+
+
+state 27
+
+    (8) command -> bk NUMBER .
+
+    forward         reduce using rule 8 (command -> bk NUMBER .)
+    fd              reduce using rule 8 (command -> bk NUMBER .)
+    right           reduce using rule 8 (command -> bk NUMBER .)
+    rt              reduce using rule 8 (command -> bk NUMBER .)
+    backward        reduce using rule 8 (command -> bk NUMBER .)
+    bk              reduce using rule 8 (command -> bk NUMBER .)
+    left            reduce using rule 8 (command -> bk NUMBER .)
+    lt              reduce using rule 8 (command -> bk NUMBER .)
+    setpos          reduce using rule 8 (command -> bk NUMBER .)
+    setxy           reduce using rule 8 (command -> bk NUMBER .)
+    setx            reduce using rule 8 (command -> bk NUMBER .)
+    sety            reduce using rule 8 (command -> bk NUMBER .)
+    home            reduce using rule 8 (command -> bk NUMBER .)
+    pendown         reduce using rule 8 (command -> bk NUMBER .)
+    pd              reduce using rule 8 (command -> bk NUMBER .)
+    penup           reduce using rule 8 (command -> bk NUMBER .)
+    pu              reduce using rule 8 (command -> bk NUMBER .)
+    setpencolor     reduce using rule 8 (command -> bk NUMBER .)
+    $end            reduce using rule 8 (command -> bk NUMBER .)
+
+
+state 28
+
+    (9) command -> left NUMBER .
+
+    forward         reduce using rule 9 (command -> left NUMBER .)
+    fd              reduce using rule 9 (command -> left NUMBER .)
+    right           reduce using rule 9 (command -> left NUMBER .)
+    rt              reduce using rule 9 (command -> left NUMBER .)
+    backward        reduce using rule 9 (command -> left NUMBER .)
+    bk              reduce using rule 9 (command -> left NUMBER .)
+    left            reduce using rule 9 (command -> left NUMBER .)
+    lt              reduce using rule 9 (command -> left NUMBER .)
+    setpos          reduce using rule 9 (command -> left NUMBER .)
+    setxy           reduce using rule 9 (command -> left NUMBER .)
+    setx            reduce using rule 9 (command -> left NUMBER .)
+    sety            reduce using rule 9 (command -> left NUMBER .)
+    home            reduce using rule 9 (command -> left NUMBER .)
+    pendown         reduce using rule 9 (command -> left NUMBER .)
+    pd              reduce using rule 9 (command -> left NUMBER .)
+    penup           reduce using rule 9 (command -> left NUMBER .)
+    pu              reduce using rule 9 (command -> left NUMBER .)
+    setpencolor     reduce using rule 9 (command -> left NUMBER .)
+    $end            reduce using rule 9 (command -> left NUMBER .)
+
+
+state 29
+
+    (10) command -> lt NUMBER .
+
+    forward         reduce using rule 10 (command -> lt NUMBER .)
+    fd              reduce using rule 10 (command -> lt NUMBER .)
+    right           reduce using rule 10 (command -> lt NUMBER .)
+    rt              reduce using rule 10 (command -> lt NUMBER .)
+    backward        reduce using rule 10 (command -> lt NUMBER .)
+    bk              reduce using rule 10 (command -> lt NUMBER .)
+    left            reduce using rule 10 (command -> lt NUMBER .)
+    lt              reduce using rule 10 (command -> lt NUMBER .)
+    setpos          reduce using rule 10 (command -> lt NUMBER .)
+    setxy           reduce using rule 10 (command -> lt NUMBER .)
+    setx            reduce using rule 10 (command -> lt NUMBER .)
+    sety            reduce using rule 10 (command -> lt NUMBER .)
+    home            reduce using rule 10 (command -> lt NUMBER .)
+    pendown         reduce using rule 10 (command -> lt NUMBER .)
+    pd              reduce using rule 10 (command -> lt NUMBER .)
+    penup           reduce using rule 10 (command -> lt NUMBER .)
+    pu              reduce using rule 10 (command -> lt NUMBER .)
+    setpencolor     reduce using rule 10 (command -> lt NUMBER .)
+    $end            reduce using rule 10 (command -> lt NUMBER .)
+
+
+state 30
+
+    (11) command -> setpos [ . NUMBER NUMBER ]
+
+    NUMBER          shift and go to state 35
+
+
+state 31
+
+    (12) command -> setxy NUMBER . NUMBER
+
+    NUMBER          shift and go to state 36
+
+
+state 32
+
+    (13) command -> setx NUMBER .
+
+    forward         reduce using rule 13 (command -> setx NUMBER .)
+    fd              reduce using rule 13 (command -> setx NUMBER .)
+    right           reduce using rule 13 (command -> setx NUMBER .)
+    rt              reduce using rule 13 (command -> setx NUMBER .)
+    backward        reduce using rule 13 (command -> setx NUMBER .)
+    bk              reduce using rule 13 (command -> setx NUMBER .)
+    left            reduce using rule 13 (command -> setx NUMBER .)
+    lt              reduce using rule 13 (command -> setx NUMBER .)
+    setpos          reduce using rule 13 (command -> setx NUMBER .)
+    setxy           reduce using rule 13 (command -> setx NUMBER .)
+    setx            reduce using rule 13 (command -> setx NUMBER .)
+    sety            reduce using rule 13 (command -> setx NUMBER .)
+    home            reduce using rule 13 (command -> setx NUMBER .)
+    pendown         reduce using rule 13 (command -> setx NUMBER .)
+    pd              reduce using rule 13 (command -> setx NUMBER .)
+    penup           reduce using rule 13 (command -> setx NUMBER .)
+    pu              reduce using rule 13 (command -> setx NUMBER .)
+    setpencolor     reduce using rule 13 (command -> setx NUMBER .)
+    $end            reduce using rule 13 (command -> setx NUMBER .)
+
+
+state 33
+
+    (14) command -> sety NUMBER .
+
+    forward         reduce using rule 14 (command -> sety NUMBER .)
+    fd              reduce using rule 14 (command -> sety NUMBER .)
+    right           reduce using rule 14 (command -> sety NUMBER .)
+    rt              reduce using rule 14 (command -> sety NUMBER .)
+    backward        reduce using rule 14 (command -> sety NUMBER .)
+    bk              reduce using rule 14 (command -> sety NUMBER .)
+    left            reduce using rule 14 (command -> sety NUMBER .)
+    lt              reduce using rule 14 (command -> sety NUMBER .)
+    setpos          reduce using rule 14 (command -> sety NUMBER .)
+    setxy           reduce using rule 14 (command -> sety NUMBER .)
+    setx            reduce using rule 14 (command -> sety NUMBER .)
+    sety            reduce using rule 14 (command -> sety NUMBER .)
+    home            reduce using rule 14 (command -> sety NUMBER .)
+    pendown         reduce using rule 14 (command -> sety NUMBER .)
+    pd              reduce using rule 14 (command -> sety NUMBER .)
+    penup           reduce using rule 14 (command -> sety NUMBER .)
+    pu              reduce using rule 14 (command -> sety NUMBER .)
+    setpencolor     reduce using rule 14 (command -> sety NUMBER .)
+    $end            reduce using rule 14 (command -> sety NUMBER .)
+
+
+state 34
+
+    (20) command -> setpencolor [ . NUMBER NUMBER NUMBER ]
+
+    NUMBER          shift and go to state 37
+
+
+state 35
+
+    (11) command -> setpos [ NUMBER . NUMBER ]
+
+    NUMBER          shift and go to state 38
+
+
+state 36
+
+    (12) command -> setxy NUMBER NUMBER .
+
+    forward         reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    fd              reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    right           reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    rt              reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    backward        reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    bk              reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    left            reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    lt              reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    setpos          reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    setxy           reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    setx            reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    sety            reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    home            reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    pendown         reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    pd              reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    penup           reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    pu              reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    setpencolor     reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+    $end            reduce using rule 12 (command -> setxy NUMBER NUMBER .)
+
+
+state 37
+
+    (20) command -> setpencolor [ NUMBER . NUMBER NUMBER ]
+
+    NUMBER          shift and go to state 39
+
+
+state 38
+
+    (11) command -> setpos [ NUMBER NUMBER . ]
+
+    ]               shift and go to state 40
+
+
+state 39
+
+    (20) command -> setpencolor [ NUMBER NUMBER . NUMBER ]
+
+    NUMBER          shift and go to state 41
+
+
+state 40
+
+    (11) command -> setpos [ NUMBER NUMBER ] .
+
+    forward         reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    fd              reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    right           reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    rt              reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    backward        reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    bk              reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    left            reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    lt              reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    setpos          reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    setxy           reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    setx            reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    sety            reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    home            reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    pendown         reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    pd              reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    penup           reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    pu              reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    setpencolor     reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+    $end            reduce using rule 11 (command -> setpos [ NUMBER NUMBER ] .)
+
+
+state 41
+
+    (20) command -> setpencolor [ NUMBER NUMBER NUMBER . ]
+
+    ]               shift and go to state 42
+
+
+state 42
+
+    (20) command -> setpencolor [ NUMBER NUMBER NUMBER ] .
+
+    forward         reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    fd              reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    right           reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    rt              reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    backward        reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    bk              reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    left            reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    lt              reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    setpos          reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    setxy           reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    setx            reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    sety            reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    home            reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    pendown         reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    pd              reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    penup           reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    pu              reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    setpencolor     reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
+    $end            reduce using rule 20 (command -> setpencolor [ NUMBER NUMBER NUMBER ] .)
 

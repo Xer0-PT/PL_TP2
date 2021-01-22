@@ -6,8 +6,8 @@ import svgwrite
 class Turtle:
 
     def __init__(self):
-        self.posX = 100
-        self.posY = 100
+        self.posX = 250
+        self.posY = 250
         self.angle = 90
         self.color = (0, 0 ,0)
         self.penStat = 2
@@ -56,11 +56,6 @@ class Turtle:
         self.angle -= newAngle
     
     def SetPos(self, x, y):
-        self.posX = x
-        self.posY = y
-        self.file.add(self.file.line((x, y), (x, y)))
-
-    def SetXY(self, x, y):
         self.posX = x
         self.posY = y
         self.file.add(self.file.line((x, y), (x, y)))

@@ -1,1 +1,16 @@
+setpos [ 10 10 ]
+fd 100
+setxy 400 200
+fd 100
+setpos [ 100 100 ]
+setpencolor [ 255 0 0 ]
+fd 50
+rt 90
+setpencolor [ 0 255 255 ]
+fd 50
+home
+fd 30
+pu
+fd 30
+pd
 fd 100

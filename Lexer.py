@@ -7,10 +7,12 @@ class Lexer:
     literals = """:,"[]"""
     t_ignore = " \n\t"
     
-    tokens = ("forward", "fd", "INT")
+    tokens = ("forward", "fd", "right", "rt", "backward", "bk", "left", "lt", "setpos", "setxy", "setx",
+                 "sety", "home", "pendown", "pd", "penup", "pu", "setpencolor", "NUMBER")
 
     def t_COMMAND(self, t):
-        r"""(forward|fd)"""        
+        r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
+            (pendown|pd)|(penup|pu)|setpencolor"""
         t.type = t.value.replace(" ", "")
         return t
 
@@ -26,9 +28,9 @@ class Lexer:
         r"[>]|[<]"
         return t
 
-    def t_INT(self, t):
-        r"[0-9]+"
-        t.value = int(t.value)
+    def t_NUMBER(self, t):
+        r"[0-9.]+"
+        t.value = float(t.value)
         return t
 
 

@@ -46,7 +46,12 @@ class Parser:
             else:
                 print(f"Unknown operator: {op}")
 
-        if type(val) == int:
+        if type(val) == float:
+            if val < 0:
+                val = val * (-1)
+            return val
+
+        if type(val) == tuple:
             return val
 
         print(f"Variable {val} undefined")
@@ -72,12 +77,63 @@ class Parser:
         p[0] = lst
 
     def p_command0(self, p):
-        """ command : forward INT 
-                    | fd INT """
+        """ command : forward NUMBER 
+                    | fd NUMBER """
         p[0] = Command("forward", p[2])
 
+    def p_command1(self, p):
+        """ command : right NUMBER 
+                    | rt NUMBER """
+        p[0] = Command("right", p[2])
 
-    def p_length(self, p):
-        """ length : INT """
-        p[0] = p[1]
+    def p_command2(self, p):
+        """ command : backward NUMBER 
+                    | bk NUMBER """
+        p[0] = Command("backward", p[2])
 
+    def p_command3(self, p):
+        """ command : left NUMBER 
+                    | lt NUMBER """
+        p[0] = Command("left", p[2])
+
+    # SETPOS | SETXY
+    def p_command4(self, p):
+        """ command : setpos '[' NUMBER NUMBER ']'
+                    | setxy NUMBER NUMBER"""
+        
+        # Obrigado Professor
+        items = len(p)
+
+        if items == 6:
+            p[0] = Command("setpos", {"x": p[3], "y": p[4]})
+        elif items == 4:
+            p[0] = Command("setpos", {"x": p[2], "y": p[3]})
+
+    def p_command5(self, p):
+        """ command : setx NUMBER """
+        p[0] = Command("setx", p[2])
+
+    def p_command6(self, p):
+        """ command : sety NUMBER """
+        p[0] = Command("sety", p[2])
+
+    def p_command7(self, p):
+        """ command : home """
+        p[0] = Command("home")
+
+    def p_command8(self, p):
+        """ command : pendown
+                    | pd """
+        p[0] = Command("pendown")
+    
+    def p_command9(self, p):
+        """ command : penup
+                    | pu """
+        p[0] = Command("penup")
+    
+    def p_command10(self, p):
+        """ command : setpencolor '[' NUMBER NUMBER NUMBER ']' """
+
+        color = (p[3], p[4], p[5])
+
+        p[0] = Command("pencolor", color)
