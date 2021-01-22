@@ -1,0 +1,219 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> command
+Rule 2     program -> program command
+Rule 3     command -> forward INT
+Rule 4     command -> fd INT
+Rule 5     command -> backward INT
+Rule 6     command -> bk INT
+Rule 7     command -> right INT
+Rule 8     command -> rt INT
+
+Terminals, with rules where they appear
+
+INT                  : 3 4 5 6 7 8
+backward             : 5
+bk                   : 6
+error                : 
+fd                   : 4
+forward              : 3
+right                : 7
+rt                   : 8
+
+Nonterminals, with rules where they appear
+
+command              : 1 2
+program              : 2 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . command
+    (2) program -> . program command
+    (3) command -> . forward INT
+    (4) command -> . fd INT
+    (5) command -> . backward INT
+    (6) command -> . bk INT
+    (7) command -> . right INT
+    (8) command -> . rt INT
+
+    forward         shift and go to state 3
+    fd              shift and go to state 4
+    backward        shift and go to state 5
+    bk              shift and go to state 6
+    right           shift and go to state 7
+    rt              shift and go to state 8
+
+    program                        shift and go to state 1
+    command                        shift and go to state 2
+
+state 1
+
+    (0) S' -> program .
+    (2) program -> program . command
+    (3) command -> . forward INT
+    (4) command -> . fd INT
+    (5) command -> . backward INT
+    (6) command -> . bk INT
+    (7) command -> . right INT
+    (8) command -> . rt INT
+
+    forward         shift and go to state 3
+    fd              shift and go to state 4
+    backward        shift and go to state 5
+    bk              shift and go to state 6
+    right           shift and go to state 7
+    rt              shift and go to state 8
+
+    command                        shift and go to state 9
+
+state 2
+
+    (1) program -> command .
+
+    forward         reduce using rule 1 (program -> command .)
+    fd              reduce using rule 1 (program -> command .)
+    backward        reduce using rule 1 (program -> command .)
+    bk              reduce using rule 1 (program -> command .)
+    right           reduce using rule 1 (program -> command .)
+    rt              reduce using rule 1 (program -> command .)
+    $end            reduce using rule 1 (program -> command .)
+
+
+state 3
+
+    (3) command -> forward . INT
+
+    INT             shift and go to state 10
+
+
+state 4
+
+    (4) command -> fd . INT
+
+    INT             shift and go to state 11
+
+
+state 5
+
+    (5) command -> backward . INT
+
+    INT             shift and go to state 12
+
+
+state 6
+
+    (6) command -> bk . INT
+
+    INT             shift and go to state 13
+
+
+state 7
+
+    (7) command -> right . INT
+
+    INT             shift and go to state 14
+
+
+state 8
+
+    (8) command -> rt . INT
+
+    INT             shift and go to state 15
+
+
+state 9
+
+    (2) program -> program command .
+
+    forward         reduce using rule 2 (program -> program command .)
+    fd              reduce using rule 2 (program -> program command .)
+    backward        reduce using rule 2 (program -> program command .)
+    bk              reduce using rule 2 (program -> program command .)
+    right           reduce using rule 2 (program -> program command .)
+    rt              reduce using rule 2 (program -> program command .)
+    $end            reduce using rule 2 (program -> program command .)
+
+
+state 10
+
+    (3) command -> forward INT .
+
+    forward         reduce using rule 3 (command -> forward INT .)
+    fd              reduce using rule 3 (command -> forward INT .)
+    backward        reduce using rule 3 (command -> forward INT .)
+    bk              reduce using rule 3 (command -> forward INT .)
+    right           reduce using rule 3 (command -> forward INT .)
+    rt              reduce using rule 3 (command -> forward INT .)
+    $end            reduce using rule 3 (command -> forward INT .)
+
+
+state 11
+
+    (4) command -> fd INT .
+
+    forward         reduce using rule 4 (command -> fd INT .)
+    fd              reduce using rule 4 (command -> fd INT .)
+    backward        reduce using rule 4 (command -> fd INT .)
+    bk              reduce using rule 4 (command -> fd INT .)
+    right           reduce using rule 4 (command -> fd INT .)
+    rt              reduce using rule 4 (command -> fd INT .)
+    $end            reduce using rule 4 (command -> fd INT .)
+
+
+state 12
+
+    (5) command -> backward INT .
+
+    forward         reduce using rule 5 (command -> backward INT .)
+    fd              reduce using rule 5 (command -> backward INT .)
+    backward        reduce using rule 5 (command -> backward INT .)
+    bk              reduce using rule 5 (command -> backward INT .)
+    right           reduce using rule 5 (command -> backward INT .)
+    rt              reduce using rule 5 (command -> backward INT .)
+    $end            reduce using rule 5 (command -> backward INT .)
+
+
+state 13
+
+    (6) command -> bk INT .
+
+    forward         reduce using rule 6 (command -> bk INT .)
+    fd              reduce using rule 6 (command -> bk INT .)
+    backward        reduce using rule 6 (command -> bk INT .)
+    bk              reduce using rule 6 (command -> bk INT .)
+    right           reduce using rule 6 (command -> bk INT .)
+    rt              reduce using rule 6 (command -> bk INT .)
+    $end            reduce using rule 6 (command -> bk INT .)
+
+
+state 14
+
+    (7) command -> right INT .
+
+    forward         reduce using rule 7 (command -> right INT .)
+    fd              reduce using rule 7 (command -> right INT .)
+    backward        reduce using rule 7 (command -> right INT .)
+    bk              reduce using rule 7 (command -> right INT .)
+    right           reduce using rule 7 (command -> right INT .)
+    rt              reduce using rule 7 (command -> right INT .)
+    $end            reduce using rule 7 (command -> right INT .)
+
+
+state 15
+
+    (8) command -> rt INT .
+
+    forward         reduce using rule 8 (command -> rt INT .)
+    fd              reduce using rule 8 (command -> rt INT .)
+    backward        reduce using rule 8 (command -> rt INT .)
+    bk              reduce using rule 8 (command -> rt INT .)
+    right           reduce using rule 8 (command -> rt INT .)
+    rt              reduce using rule 8 (command -> rt INT .)
+    $end            reduce using rule 8 (command -> rt INT .)
+
