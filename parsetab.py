@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'INT backward bk fd forward right rt program : command  program : program command  command : forward INT\n                    | fd INT  command : backward INT\n                    | bk INT  command : right INT\n                    | rt INT '
+_lr_signature = 'INT fd forward program : command  program : program command  command : forward INT \n                    | fd INT  length : INT '
     
-_lr_action_items = {'forward':([0,1,2,9,10,11,12,13,14,15,],[3,3,-1,-2,-3,-4,-5,-6,-7,-8,]),'fd':([0,1,2,9,10,11,12,13,14,15,],[4,4,-1,-2,-3,-4,-5,-6,-7,-8,]),'backward':([0,1,2,9,10,11,12,13,14,15,],[5,5,-1,-2,-3,-4,-5,-6,-7,-8,]),'bk':([0,1,2,9,10,11,12,13,14,15,],[6,6,-1,-2,-3,-4,-5,-6,-7,-8,]),'right':([0,1,2,9,10,11,12,13,14,15,],[7,7,-1,-2,-3,-4,-5,-6,-7,-8,]),'rt':([0,1,2,9,10,11,12,13,14,15,],[8,8,-1,-2,-3,-4,-5,-6,-7,-8,]),'$end':([1,2,9,10,11,12,13,14,15,],[0,-1,-2,-3,-4,-5,-6,-7,-8,]),'INT':([3,4,5,6,7,8,],[10,11,12,13,14,15,]),}
+_lr_action_items = {'forward':([0,1,2,5,6,7,],[3,3,-1,-2,-3,-4,]),'fd':([0,1,2,5,6,7,],[4,4,-1,-2,-3,-4,]),'$end':([1,2,5,6,7,],[0,-1,-2,-3,-4,]),'INT':([3,4,],[6,7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'command':([0,1,],[2,9,]),}
+_lr_goto_items = {'program':([0,],[1,]),'command':([0,1,],[2,5,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,12 +27,9 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> command','program',1,'p_program0','Parser.py',36),
-  ('program -> program command','program',2,'p_program1','Parser.py',40),
-  ('command -> forward INT','command',2,'p_command0','Parser.py',43),
-  ('command -> fd INT','command',2,'p_command0','Parser.py',44),
-  ('command -> backward INT','command',2,'p_command1','Parser.py',48),
-  ('command -> bk INT','command',2,'p_command1','Parser.py',49),
-  ('command -> right INT','command',2,'p_command2','Parser.py',53),
-  ('command -> rt INT','command',2,'p_command2','Parser.py',54),
+  ('program -> command','program',1,'p_program0','Parser.py',64),
+  ('program -> program command','program',2,'p_program1','Parser.py',69),
+  ('command -> forward INT','command',2,'p_command0','Parser.py',75),
+  ('command -> fd INT','command',2,'p_command0','Parser.py',76),
+  ('length -> INT','length',1,'p_length','Parser.py',80),
 ]

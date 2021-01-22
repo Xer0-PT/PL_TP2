@@ -3,14 +3,12 @@
 import sys
 import ply.yacc as yacc
 from Lexer import Lexer
-
 from Turtle import Turtle
+from Command import Command
 
 class Parser:
     
     tokens = Lexer.tokens
-
-    #tokens = ("COMMAND", "INT")
 
     # Tem de ter um sitio para guardar o parser
     # Tem de ter um sitio para guardar o lexer
@@ -24,40 +22,62 @@ class Parser:
         self.lexer = Lexer()
         self.lexer.Build(input, **kwargs)
         self.parser = yacc.yacc(module=self, **kwargs)
-        ans = self.parser.parse(lexer=self.lexer.lexer)
-        print(ans)
+        program = self.parser.parse(lexer=self.lexer.lexer)
+        Command.exec(program, self)
+    
+    def value(self, val):
 
-    def p_error(self, t):
+        """
+        Código do Prof para verificar se é um dicionário,
+        tem mais código que pode ser necessário, aqui apaguei algum
+        """
+        if type(val) == dict and "op" in val:
+            left = self.value(val["left"])
+            right = self.value(val["right"])
+            op = val["op"]
+            if   op == "+": return left + right
+            elif op == "*": return left * right
+            elif op == "-": return left - right
+            elif op == "/":
+                if right == 0:
+                    print("Division by zero")
+                    exit(1)
+                return left / right
+            else:
+                print(f"Unknown operator: {op}")
+
+        if type(val) == int:
+            return val
+
+        print(f"Variable {val} undefined")
+        return 0
+
+
+    def p_error(self, p):
         print("Syntax error", file=sys.stderr)
+        if p:
+            print(f"Unexpected token '{p.type}'", file=sys.stderr)
         exit(1)
 
     # Isto é um programa
-    def p_program0(self, t):
+    def p_program0(self, p):
         """ program : command """
+        p[0] = [p[1]]
 
     # Isto é a recursividade de um programa
-    def p_program1(self, t):
+    def p_program1(self, p):
         """ program : program command """
+        lst = p[1]
+        lst.append(p[2])
+        p[0] = lst
 
     def p_command0(self, p):
-        """ command : forward INT
+        """ command : forward INT 
                     | fd INT """
-        self.turtle.addLine("fd", p[2])
-
-    def p_command1(self, p):
-        """ command : backward INT
-                    | bk INT """
-        self.turtle.addLine("bk", p[2])
-
-    def p_command2(self, t):
-        """ command : right INT
-                    | rt INT """
+        p[0] = Command("forward", p[2])
 
 
-    #def p_color(self, p):
-    #    """ color : [INT INT INT] """
-    #    p[0] = (p[1], p[2], p[3])
+    def p_length(self, p):
+        """ length : INT """
+        p[0] = p[1]
 
-    # def p_pos(self, p):
-    #     """ pos : INT """
-    #     p[0] = (p[1])
