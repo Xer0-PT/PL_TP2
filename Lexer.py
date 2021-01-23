@@ -7,7 +7,7 @@ class Lexer:
     literals = """:,"[]"""
     t_ignore = " \n\t"
     
-    tokens = ("forward", "fd", "right", "rt", "backward", "bk", "left", 
+    tokens = ("forward", "fd", "right", "rt", "back", "bk", "left", 
                 "lt", "setpos", "setxy", "setx", "sety", "home", "pendown",
                 "pd", "penup", "pu", "setpencolor", "make", "repeat", "while",
                 "NUMBER", "VAR", "OPERATOR", "SIGN")

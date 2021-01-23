@@ -71,6 +71,8 @@ def do_make(command, parser):
         result = parser.value(operation)
         parser.vars[var] = result
 
+        print(result)
+
     elif command.args["make"] == 3:
         # make '"' VAR NUMBER OPERATOR ':' VAR
         #   1   2   3   4       5       6   7
@@ -86,6 +88,8 @@ def do_make(command, parser):
 
         result = parser.value(operation)
         parser.vars[var] = result
+
+        print(result)
 
     print(parser.vars)
 
@@ -106,16 +110,17 @@ def do_repeat(command, parser):
 # while [ :i > 0 ] [ code ]
 def do_while(command, parser):
 
-# "while", {'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]}
-
     code = command.args['code']
 #    val = parser.checkVar(command.args['var'])
     val = parser.value(command.args['var'])
     number = parser.value(command.args['number'])
     sign = command.args['sign']
 
-    if sign == ">":
-        while val > number:
+    print(parser.vars[val])
+    print(number)
+
+    if sign == '>':
+        while parser.vars[val] > number:
             Command.exec(code, parser)
     else:
         while val < number:

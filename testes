@@ -1,0 +1,55 @@
+make "i 1
+make "l 45
+
+forward 1
+right 45
+fd 1
+rt 45
+forward :i
+right :l
+fd :i
+rt :l
+
+make "a 20
+make "b 10
+back 10
+left 20
+bk 10
+lt 10
+back :a
+left :b
+bk :a
+lt :b
+
+setpos [ 140 140 ]
+setxy 10 10
+setpos [ :a 100 ]
+setpos [ 100 :a ]
+setpos [ :a :b ]
+setxy :b 10
+setxy 10 :a
+setxy :a :b
+
+setx 20
+setx :a
+
+sety 20
+sety :b
+
+setpencolor [ 100 100 100 ]
+setpencolor [ 100 100 :a ]
+setpencolor [ 100 :a 100 ]
+setpencolor [ 100 :a :b ]
+setpencolor [ :a 100 100 ] 
+setpencolor [ :b 100 :a ]
+setpencolor [ :a :a 100 ]
+setpencolor [ :a :b :i ]
+
+make "i 10
+make "l 2
+
+while [ :i > 0 ] [
+    fd :l rt 90
+    make "i :i - 1
+    make "l 1.75 * :l
+]

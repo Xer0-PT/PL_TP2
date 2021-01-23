@@ -1,10 +1,8 @@
-make "i 90
-make "l 300
+make "i 10
+make "l 2
 
-fd :l
-rt :i
-fd :l
-rt :i
-fd :l
-rt :i
-fd :l
+while [ :i > 0 ] [
+    fd :l rt 90
+    make "i :i - 1
+    make "l 1.75 * :l
+]

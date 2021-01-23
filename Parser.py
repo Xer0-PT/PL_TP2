@@ -78,45 +78,48 @@ class Parser:
         lst.append(p[2])
         p[0] = lst
 
-    def p_var(self, p):
-        """ var : VAR
-                | '"' VAR
-                | ':' VAR """
-
-        if len(p) == 3:
-            p[0] = p[2]
-        else:
-            p[0] = p[1]
-
     def p_command0(self, p):
         """ command : forward NUMBER 
                     | fd NUMBER 
-                    | forward var
-                    | fd var """
+                    | forward ':' VAR
+                    | fd ':' VAR """
         
-        p[0] = Command("forward", p[2])
+        if len(p) == 3:
+            p[0] = Command("forward", p[2])
+        else:
+            p[0] = Command("forward", p[3])
 
     def p_command1(self, p):
         """ command : right NUMBER 
                     | rt NUMBER
-                    | right var
-                    | rt var """
-
-        p[0] = Command("right", p[2])
+                    | right ':' VAR
+                    | rt ':' VAR """
+        if len(p) == 3:
+            p[0] = Command("right", p[2])
+        else:
+            p[0] = Command("right", p[3])
 
     def p_command2(self, p):
-        """ command : backward NUMBER 
+        """ command : back NUMBER 
                     | bk NUMBER
-                    | backward ':' VAR
+                    | back ':' VAR
                     | bk ':' VAR """
-        p[0] = Command("backward", p[2])
+
+        if len(p) == 3:
+            p[0] = Command("backward", p[2])
+        else:
+            p[0] = Command("backward", p[3])
 
     def p_command3(self, p):
         """ command : left NUMBER 
                     | lt NUMBER
                     | left ':' VAR
                     | lt ':' VAR """
-        p[0] = Command("left", p[2])
+
+        if len(p) == 3:
+            p[0] = Command("left", p[2])
+        else:
+            p[0] = Command("left", p[3])
 
     # SETPOS | SETXY
     def p_command4(self, p):
@@ -130,20 +133,42 @@ class Parser:
                     | setxy ':' VAR ':' VAR """
         
         # Obrigado Professor
-        if len(p) == 6:
-            p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-        else:
+        if len(p) == 6: #setpos '[' NUMBER NUMBER ']'
+            if p[1] == 'setpos': #setpos '[' NUMBER NUMBER ']'
+                p[0] = Command("setpos", {"x": p[3], "y": p[4]})
+            else: # setxy ':' VAR ':' VAR """
+                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
+        elif len(p) == 7:  #setpos '[' ':' VAR NUMBER ']'
+            if p[3] == ':': #setpos '[' ':' VAR NUMBER ']'
+                p[0] = Command("setpos", {"x": p[4], "y": p[5]})
+            else: #setpos 'setpos '[' NUMBER ':' VAR ']'
+                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
+        elif len(p) == 8: #setpos '[' VAR ':' VAR ']'
+            p[0] = Command("setpos", {"x": p[4], "y": p[6]})
+        elif len(p) == 4: #setxy NUMBER NUMBER
             p[0] = Command("setpos", {"x": p[2], "y": p[3]})
+        elif len(p) == 5: #setxy ':' VAR NUMBER
+            if p[2] == ':':#setxy ':' VAR NUMBER
+                p[0] = Command("setpos", {"x": p[3], "y": p[4]})
+            else: #setxy NUMBER ':' VAR
+                p[0] = Command("setpos", {"x": p[2], "y": p[4]})
+        
 
     def p_command5(self, p):
         """ command : setx NUMBER 
                     | setx ':' VAR"""
-        p[0] = Command("setx", p[2])
+        if len(p) == 3:
+            p[0] = Command("setx", p[2])
+        else:
+            p[0] = Command("setx", p[3])
 
     def p_command6(self, p):
         """ command : sety NUMBER
                     | sety ':' VAR """
-        p[0] = Command("sety", p[2])
+        if len(p) == 3:
+            p[0] = Command("sety", p[2])
+        else:
+            p[0] = Command("sety", p[3])
 
     def p_command7(self, p):
         """ command : home """
@@ -164,15 +189,38 @@ class Parser:
                     | setpencolor '[' NUMBER NUMBER ':' VAR ']'
                     | setpencolor '[' NUMBER ':' VAR NUMBER ']'
                     | setpencolor '[' NUMBER ':' VAR ':' VAR ']'
-                    | setpencolor '[' ':' VAR NUMBER NUMBER ']'
+                    | setpencolor '[' ':' VAR NUMBER NUMBER ']' 
                     | setpencolor '[' ':' VAR NUMBER ':' VAR ']'
                     | setpencolor '[' ':' VAR ':' VAR NUMBER ']'
                     | setpencolor '[' ':' VAR ':' VAR ':' VAR ']' """
 
-        color = (p[3], p[4], p[5])
-
-        p[0] = Command("pencolor", color)
-
+        if len(p) == 7: #setpencolor '[' NUMBER NUMBER NUMBER ']' 
+            color = (p[3], p[4], p[5])
+            p[0] = Command("pencolor", color)
+        elif len(p) == 8:
+            if p[5] == ':': #setpencolor '[' NUMBER NUMBER ':' VAR ']' 
+                color = (p[3], p[4], p[6])
+                p[0] = Command("pencolor", color)
+            elif p[4] == ':': #setpencolor '[' NUMBER ':' VAR NUMBER ']'
+                color = (p[3], p[5], p[6])
+                p[0] = Command("pencolor", color)
+            else: # setpencolor '[' ':' VAR NUMBER NUMBER ']' #8
+                color = (p[4], p[5], p[6])
+                p[0] = Command("pencolor", color)
+        elif len(p) == 9:
+            if p[3] == 'NUMBER': #setpencolor '[' NUMBER ':' VAR ':' VAR ']'
+                color = (p[3], p[5], p[7])
+                p[0] = Command("pencolor", color)
+            elif p[5] == 'NUMBER': #setpencolor '[' ':' VAR NUMBER ':' VAR ']' 
+                color = (p[4], p[5], p[7])
+                p[0] = Command("pencolor", color)
+            else: # setpencolor '[' ':' VAR ':' VAR NUMBER ']'
+                color = (p[4], p[6], p[7])
+                p[0] = Command("pencolor", color)
+        else: #setpencolor '[' ':' VAR ':' VAR ':' VAR ']'
+            color = (p[4], p[6], p[8])
+            p[0] = Command("pencolor", color)
+            
     def p_command11(self, p):
         """ command : make '"' VAR NUMBER
                     | make '"' VAR ':' VAR OPERATOR NUMBER
