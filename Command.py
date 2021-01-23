@@ -45,20 +45,62 @@ def set_pencolor(command, parser):
     color = parser.value(command.args)
     parser.turtle.PenColor(color)
 
-def do_make_1(command, parser):
-    var = command.args['var']
-    value = parser.value(command.args['number'])
-    parser.vars[var] = value
+def do_make(command, parser):
+    if command.args["make"] == 1:
+        var = command.args['var']
+        value = parser.value(command.args['number'])
+        parser.vars[var] = value
+    
+    elif command.args["make"] == 2:
+        # Definir variável i
+        # Atribuir o valor de k - 1
+        # Temos de verificar se k existe
+        # Se existe, qual o seu valor?
+        # k é o número da esquerda
+        # 1 é o número da direita
+        # make "i :k − 1
 
-def do_make_2(command, parser):
-    var1 = command.args['var1']
-    var2 = command.args['var2']
-    op = command.args['operator']
-    value = parser.value(command.args['number'])
-    for i, var1 in parser.vars[]:
-        
+        var = command.args['var1'] # variável a ser guardada
+        left = parser.checkVar(command.args['var2']) # valor da variável
+        right = parser.value(command.args['number'])
+        operator = command.args['operator']
 
-    parser.vars[var] = value
+        operation = {'left': left, 'operator': operator, 'right': right}
+
+        result = parser.value(operation)
+        parser.vars[var] = result
+
+        print(result)
+
+    elif command.args["make"] == 3:
+        # make '"' VAR NUMBER OPERATOR ':' VAR
+        #   1   2   3   4       5       6   7
+        # make "l 1.75 * :l
+
+        var = command.args['var1'] # variável a ser guardada
+        right = parser.checkVar(command.args['var2']) # valor da variável
+        left = parser.value(command.args['number'])
+        operator = command.args['operator']
+
+        operation = {'left': left, 'operator': operator, 'right': right}
+
+        result = parser.value(operation)
+        parser.vars[var] = result
+
+        print(result)
+
+
+    print(parser.vars)
+
+
+#    var1 = command.args['var1']
+#    var2 = command.args['var2']
+#    op = command.args['operator']
+#    value = parser.value(command.args['number'])
+
+#    for i, var1 in parser.vars[]:
+
+#    parser.vars[var] = value
 
 
 class Command:
@@ -74,8 +116,7 @@ class Command:
         "pendown": set_pendown,
         "penup": set_penup,
         "pencolor": set_pencolor,
-        "make_1": do_make_1,
-        "make_2": do_make_2,
+        "make": do_make,
     }
 
     def __init__(self, command, args):

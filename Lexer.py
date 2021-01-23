@@ -8,11 +8,11 @@ class Lexer:
     t_ignore = " \n\t"
     
     tokens = ("forward", "fd", "right", "rt", "backward", "bk", "left", "lt", "setpos", "setxy", "setx",
-                 "sety", "home", "pendown", "pd", "penup", "pu", "setpencolor", "NUMBER", "VAR", "OPERATOR")
+                 "sety", "home", "pendown", "pd", "penup", "pu", "setpencolor", "make", "NUMBER", "VAR", "OPERATOR")
 
     def t_COMMAND(self, t):
         r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
-            (pendown|pd)|(penup|pu)|setpencolor"""
+            (pendown|pd)|(penup|pu)|setpencolor|make"""
         t.type = t.value.replace(" ", "")
         return t
 

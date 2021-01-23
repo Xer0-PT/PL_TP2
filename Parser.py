@@ -27,16 +27,22 @@ class Parser:
         program = self.parser.parse(lexer=self.lexer.lexer)
         Command.exec(program, self)
     
+    def checkVar(self, var):
+        if var in self.vars:
+            return self.vars[var]
+        else:
+            print("ERRRRRRRRROOU!!!")
+
     def value(self, val):
 
         """
         Código do Prof para verificar se é um dicionário,
         tem mais código que pode ser necessário, aqui apaguei algum
         """
-        if type(val) == dict and "op" in val:
+        if type(val) == dict and "operator" in val:
             left = self.value(val["left"])
             right = self.value(val["right"])
-            op = val["op"]
+            op = val["operator"]
             if   op == "+": return left + right
             elif op == "*": return left * right
             elif op == "-": return left - right
@@ -106,7 +112,7 @@ class Parser:
         # Obrigado Professor
         if len(p) == 6:
             p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-        else
+        else:
             p[0] = Command("setpos", {"x": p[2], "y": p[3]})
 
     def p_command5(self, p):
@@ -139,15 +145,15 @@ class Parser:
         p[0] = Command("pencolor", color)
 
     def p_command11(self, p):
-        """ command : make '"' VAR NUMBER 
+        """ command : make '"' VAR NUMBER
                     | make '"' VAR ':' VAR OPERATOR NUMBER
                     | make '"' VAR NUMBER OPERATOR ':' VAR """
 
         if len(p) == 5:
-            p[0] = Command("make_1", {"var": p[4], "number": p[5]})
+            p[0] = Command("make", {"make": 1, "var": p[3], "number": p[4]})
         if len(p) == 8:
-            if p[5] == ":"
-                p[0] = Command("make_2", {"var1": p[4], "var2": p[6], "operator": p[7],"number": p[8]})
+            if p[4] == ":":
+                p[0] = Command("make", {"make": 2, "var1": p[3], "var2": p[5], "operator": p[6],"number": p[7]})
             else:
-                p[0] = Command("make_2", {"var1": p[4], "number": p[5], "operator": p[6], "var2": p[8]})
+                p[0] = Command("make", {"make": 3, "var1": p[3], "number": p[4], "operator": p[5], "var2": p[7]})
     
