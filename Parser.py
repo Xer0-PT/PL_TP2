@@ -234,7 +234,6 @@ class Parser:
             else:
                 p[0] = Command("make", {"make": 3, "var1": p[3], "number": p[4], "operator": p[5], "var2": p[7]})
     
-    
     def p_command12(self, p):
         """ command : repeat NUMBER '[' program ']' 
                     | repeat ':' VAR '[' program ']' """
@@ -244,8 +243,71 @@ class Parser:
         else:
             p[0] = Command("repeat", {"repeat": 2, "var": p[3], "code": p[5]})
 
-
     def p_command13(self, p):
         """ command : while '[' ':' VAR SIGN NUMBER ']' '[' program ']' """
+#                    | while '[' ':' VAR SIGN NUMBER ']' '[' program ']' """ FIXME
         
         p[0] = Command("while", {'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]})
+
+    def p_command14(self, p):
+        """ command : if NUMBER SIGN NUMBER '[' program ']'
+                    | if ':' VAR SIGN NUMBER '[' program ']'
+                    | if  NUMBER SIGN ':' VAR '[' program ']'
+                    | if ':' VAR SIGN ':' VAR '[' program ']'
+                    | if '[' NUMBER SIGN NUMBER ']' '[' program ']'
+                    | if '[' ':' VAR SIGN NUMBER ']' '[' program ']'
+                    | if '[' NUMBER SIGN ':' VAR ']' '[' program ']'
+                    | if '[' ':' VAR SIGN ':' VAR ']' '[' program ']' """
+
+        if len(p) == 8:
+            p[0] = Command("if", {'if':1, 'number1': p[2], 'sign': p[3], 'number2': p[4], 'code': p[6]})
+        elif len(p) == 9:
+            if p[2] == ':':
+                p[0] = Command("if", {'if':2,'var': p[3], 'sign': p[4], 'number': p[5], 'code': p[7]})
+            else:
+                p[0] = Command("if", {'if':2, 'number': p[2], 'sign': p[3], 'var': p[5], 'code': p[7]})
+        elif len(p) == 10:
+            if p[2] == ':':
+                p[0] = Command("if", {'if':3, 'var1': p[3], 'sign': p[4], 'var2': p[6], 'code': p[8]})
+            else:
+                p[0] = Command("if", {'if':1,'number1': p[3], 'sign': p[4], 'number2': p[5], 'code': p[8]})
+        elif len(p) == 11:
+            if p[3] == ':':
+                p[0] = Command("if", {'if':2, 'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]})
+            else:
+                p[0] = Command("if", {'if':2, 'number': p[3], 'sign': p[4], 'var': p[6], 'code': p[9]})
+        else:
+            p[0] = Command("if", {'if':3, 'var1': p[4], 'sign': p[5], 'var2': p[7], 'code': p[10]})
+
+    def p_command15(self, p):
+        """ command : ifelse NUMBER SIGN NUMBER '[' program ']' '[' program ']'
+                    | ifelse ':' VAR SIGN NUMBER '[' program ']' '[' program ']'
+                    | ifelse NUMBER SIGN ':' VAR '[' program ']' '[' program ']'
+                    | ifelse ':' VAR SIGN ':' VAR '[' program ']' '[' program ']'
+                    | ifelse '[' NUMBER SIGN NUMBER ']' '[' program ']' '[' program ']'
+                    | ifelse '[' ':' VAR SIGN NUMBER ']' '[' program ']' '[' program ']'
+                    | ifelse '[' NUMBER SIGN ':' VAR ']' '[' program ']' '[' program ']'
+                    | ifelse '[' ':' VAR SIGN ':' VAR ']' '[' program ']' '[' program ']' """
+
+        if len(p) == 11:
+                p[0] = Command("ifelse", {'ifelse':1, 'number1': p[2], 'sign': p[3], 'number2': p[4], 'code1': p[6], 'code2': p[9]})
+        elif len(p) == 12:
+            if p[2] == ':':
+                p[0] = Command("ifelse", {'ifelse':2,'var': p[3], 'sign': p[4], 'number': p[5], 'code1': p[7], 'code2': p[10]})
+            else:
+                p[0] = Command("ifelse", {'ifelse':2, 'number': p[2], 'sign': p[3], 'var': p[5], 'code1': p[7], 'code2': p[10]})
+        elif len(p) == 13:
+            if p[2] == ':':
+                p[0] = Command("ifelse", {'ifelse':3, 'var1': p[3], 'sign': p[4], 'var2': p[6], 'code1': p[8], 'code2': p[11]})
+            else:
+                p[0] = Command("ifelse", {'ifelse':1,'number1': p[3], 'sign': p[4], 'number2': p[5], 'code1': p[8], 'code2': p[11]})
+        elif len(p) == 14:
+            if p[3] == ':':
+                p[0] = Command("ifelse", {'ifelse':2, 'var': p[4], 'sign': p[5], 'number': p[6], 'code1': p[9], 'code2': p[12]})
+            else:
+                p[0] = Command("ifelse", {'ifelse':2, 'number': p[3], 'sign': p[4], 'var': p[6], 'code1': p[9], 'code2': p[12]})
+        else:
+            p[0] = Command("ifelse", {'ifelse':3, 'var1': p[4], 'sign': p[5], 'var2': p[7], 'code1': p[10], 'code2': p[13]})
+
+    def p_command16(self, p):
+        """ command : to STR  """

@@ -10,11 +10,11 @@ class Lexer:
     tokens = ("forward", "fd", "right", "rt", "back", "bk", "left", 
                 "lt", "setpos", "setxy", "setx", "sety", "home", "pendown",
                 "pd", "penup", "pu", "setpencolor", "make", "repeat", "while",
-                "NUMBER", "VAR", "OPERATOR", "SIGN")
+                "if", "ifelse", "NUMBER", "VAR", "OPERATOR", "SIGN")
 
     def t_COMMAND(self, t):
         r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
-            (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while"""
+            (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while|if|ifelse"""
         t.type = t.value.replace(" ", "")
         return t
 
@@ -27,7 +27,7 @@ class Lexer:
         return t
     
     def t_SIGN(self,t):
-        r"[>]|[<]"
+        r"[>]|[<]|[=]"
         return t
 
     def t_NUMBER(self, t):
