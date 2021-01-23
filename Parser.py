@@ -325,8 +325,6 @@ class Parser:
     def p_command16(self, p):        
         """ command : TO STR varlist '[' program ']' END """
 
-        print(p.value)
-
         p[0] = Command("to", {'name': p[2], 'args': p[3], 'code': p[5]})
 
     def p_valuelist(self, p):

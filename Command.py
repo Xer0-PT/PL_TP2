@@ -219,8 +219,8 @@ class Command:
         "while": do_while,
         "if": do_if,
         "ifelse": do_ifelse,
-#        "to": do_to,
-#        "call": do_call,
+        "to": do_to,
+        "call": do_call,
     }
 
     def __init__(self, command, args):

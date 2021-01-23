@@ -14,7 +14,7 @@ class Lexer:
 
     def t_COMMAND(self, t):
         r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
-            (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while|if|ifelse|TO"""
+            (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while|if|ifelse|TO|END"""
         t.type = t.value.replace(" ", "")
         print(t.value)
         return t
@@ -25,7 +25,6 @@ class Lexer:
 
     def t_STR(self, t):
         r"[A-Z]+"
-        #r"[teste]"
         print(t.value)
         return t
 
