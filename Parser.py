@@ -16,6 +16,8 @@ class Parser:
         self.parser = None
         self.lexer = None
         self.turtle = Turtle()
+        self.vars = {}
+        self.funcs = {}
 
     # Recebe o ficheiro/texto a que vai fazer parse
     def Parse(self, input, **kwargs):
@@ -102,11 +104,9 @@ class Parser:
                     | setxy NUMBER NUMBER"""
         
         # Obrigado Professor
-        items = len(p)
-
-        if items == 6:
+        if len(p) == 6:
             p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-        elif items == 4:
+        else
             p[0] = Command("setpos", {"x": p[2], "y": p[3]})
 
     def p_command5(self, p):
@@ -119,17 +119,17 @@ class Parser:
 
     def p_command7(self, p):
         """ command : home """
-        p[0] = Command("home")
+        p[0] = Command("home", "")
 
     def p_command8(self, p):
         """ command : pendown
                     | pd """
-        p[0] = Command("pendown")
+        p[0] = Command("pendown", "")
     
     def p_command9(self, p):
         """ command : penup
                     | pu """
-        p[0] = Command("penup")
+        p[0] = Command("penup", "")
     
     def p_command10(self, p):
         """ command : setpencolor '[' NUMBER NUMBER NUMBER ']' """
@@ -137,3 +137,17 @@ class Parser:
         color = (p[3], p[4], p[5])
 
         p[0] = Command("pencolor", color)
+
+    def p_command11(self, p):
+        """ command : make '"' VAR NUMBER 
+                    | make '"' VAR ':' VAR OPERATOR NUMBER
+                    | make '"' VAR NUMBER OPERATOR ':' VAR """
+
+        if len(p) == 5:
+            p[0] = Command("make_1", {"var": p[4], "number": p[5]})
+        if len(p) == 8:
+            if p[5] == ":"
+                p[0] = Command("make_2", {"var1": p[4], "var2": p[6], "operator": p[7],"number": p[8]})
+            else:
+                p[0] = Command("make_2", {"var1": p[4], "number": p[5], "operator": p[6], "var2": p[8]})
+    

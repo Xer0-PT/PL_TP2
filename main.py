@@ -5,6 +5,8 @@ from Parser import Parser
 
 parser = Parser()
 
+# Fazer um for para ler vário ficheiros FIXME
+
 with open("teste.logo", mode="r") as fh:
     contents = fh.read()
 

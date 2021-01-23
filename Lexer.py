@@ -8,7 +8,7 @@ class Lexer:
     t_ignore = " \n\t"
     
     tokens = ("forward", "fd", "right", "rt", "backward", "bk", "left", "lt", "setpos", "setxy", "setx",
-                 "sety", "home", "pendown", "pd", "penup", "pu", "setpencolor", "NUMBER")
+                 "sety", "home", "pendown", "pd", "penup", "pu", "setpencolor", "NUMBER", "VAR", "OPERATOR")
 
     def t_COMMAND(self, t):
         r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
@@ -16,12 +16,12 @@ class Lexer:
         t.type = t.value.replace(" ", "")
         return t
 
-    def t_OPERATION(self, t):
+    def t_OPERATOR(self, t):
         r"[+]|[-]|[/]|[*]"
         return t
     
     def t_VAR(self, t):
-        r"[a-wyz][0-9a-z]*"
+        r"[a-z]+"
         return t
     
     def t_SIGN(self,t):
@@ -32,7 +32,6 @@ class Lexer:
         r"[0-9.]+"
         t.value = float(t.value)
         return t
-
 
     def t_error(self, t):
         print(f"Parser error. Unexpected char: {t.value[0]}", file=sys.stderr)

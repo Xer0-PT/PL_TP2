@@ -18,10 +18,6 @@ class Turtle:
         x1 = self.posX
         y1 = self.posY
 
-        """
-        Com soma o sentido da tartaruga é de cima para baixo.
-        """
-        # FIXME Confirmar isto
         x2 = x1 + math.cos(math.radians(self.angle)) * length
         y2 = y1 + math.sin(math.radians(self.angle)) * length
     
@@ -46,14 +42,10 @@ class Turtle:
                                                         stroke_width = self.penStat))
 
     def Left(self, newAngle):
-        """
-        Alterei para soma, desta maneira a linha vira para a esquerda, vista do utilizador.
-        Acho que fica mais intuitivo.
-        """
-        self.angle += newAngle
+        self.angle -= newAngle
 
     def Right(self, newAngle):
-        self.angle -= newAngle
+        self.angle += newAngle
     
     def SetPos(self, x, y):
         self.posX = x
@@ -69,8 +61,8 @@ class Turtle:
         self.file.add(self.file.line((self.posX, y), (self.posX, y)))
 
     def Home(self):
-        self.posX = 100
-        self.posY = 100
+        self.posX = 250
+        self.posY = 250
         self.angle = 90
         self.color = (0, 0 ,0)
         self.penStat = 2
@@ -83,4 +75,3 @@ class Turtle:
 
     def PenColor(self, newColor):
         self.color = newColor
-
