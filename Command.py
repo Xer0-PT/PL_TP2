@@ -91,7 +91,7 @@ def do_make(command, parser):
 
         print(result)
 
-    print(parser.vars)
+    #print(parser.vars)
 
 def do_repeat(command, parser):
     code = command.args['code']
@@ -100,31 +100,27 @@ def do_repeat(command, parser):
     if command.args["repeat"] == 1:
         repeat = parser.value(command.args['number'])
     else:
-#        repeat = parser.checkVar(command.args['var'])
         repeat = parser.value(command.args['var'])
 
     while i < repeat:
         Command.exec(code, parser)
         i += 1
 
-# while [ :i > 0 ] [ code ]
 def do_while(command, parser):
 
     code = command.args['code']
-#    val = parser.checkVar(command.args['var'])
     val = parser.value(command.args['var'])
     number = parser.value(command.args['number'])
     sign = command.args['sign']
 
-    print(parser.vars[val])
-    print(number)
-
     if sign == '>':
-        while parser.vars[val] > number:
+        while val > number:
             Command.exec(code, parser)
+            val = parser.value(command.args['var'])
     else:
         while val < number:
             Command.exec(code, parser)
+            val = parser.value(command.args['var'])
 
 
 class Command:
