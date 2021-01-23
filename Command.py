@@ -178,6 +178,29 @@ def try_if(sign, val1, val2):
     else:
         print("Unkown signal!")
 
+def do_to(command, parser):
+    funcname = command.args["name"]
+    code = command.args["code"]
+    params = command.args["args"]
+    parser.funcs[funcname] = {"code": code, "args": params}
+
+def do_call(command, parser):
+    funcname = command.args["name"]
+    if funcname not in parser.funcs:
+        print(f"Unknown function '{funcname}'")
+        exit(1)
+    params = parser.funcs[funcname]["args"]
+    code = parser.funcs[funcname]["code"]
+    vals = command.args["args"]
+
+    backup_vars = parser.vars.copy()
+
+    for var, val in zip(params, vals):
+        parser.vars[var] = parser.value(val)
+    Command.exec(code, parser)
+    parser.vars = backup_vars.copy()
+
+
 class Command:
     dispatch_table = {
         "forward": go_forward,
@@ -196,6 +219,8 @@ class Command:
         "while": do_while,
         "if": do_if,
         "ifelse": do_ifelse,
+#        "to": do_to,
+#        "call": do_call,
     }
 
     def __init__(self, command, args):

@@ -63,6 +63,7 @@ class Parser:
     def p_error(self, p):
         print("Syntax error", file=sys.stderr)
         if p:
+            print(p)
             print(f"Unexpected token '{p.type}'", file=sys.stderr)
         exit(1)
 
@@ -309,5 +310,38 @@ class Parser:
         else:
             p[0] = Command("ifelse", {'ifelse':3, 'var1': p[4], 'sign': p[5], 'var2': p[7], 'code1': p[10], 'code2': p[13]})
 
-    def p_command16(self, p):
-        """ command : to STR  """
+    def p_varlist(self, p):
+        """ varlist :
+                    | ':' VAR
+                    | varlist ':' VAR """
+        if len(p) == 1:
+            p[0] = []
+        elif len(p) == 3:
+            p[0] = [p[2]]
+        else:
+            p[0] = p[1]
+            p[0].append(p[4])
+
+    def p_command16(self, p):        
+        """ command : TO STR varlist '[' program ']' END """
+
+        print(p.value)
+
+        p[0] = Command("to", {'name': p[2], 'args': p[3], 'code': p[5]})
+
+    def p_valuelist(self, p):
+        """ valuelist :
+                    | NUMBER
+                    | valuelist NUMBER """
+        if len(p) == 1:
+            p[0] = []
+        elif len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1]
+            p[0].append(p[2])
+
+    def p_command17(self, p):
+        """ command : STR valuelist """
+        p[0] = Command("call", {'name': p[1], 'args': p[2]})
+
