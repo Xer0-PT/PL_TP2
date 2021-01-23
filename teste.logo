@@ -1,4 +1,10 @@
-make "i 10
-make "l 2
-make "i :i - 1
-make "l 1.75 * :l
+make "i 90
+make "l 300
+
+fd :l
+rt :i
+fd :l
+rt :i
+fd :l
+rt :i
+fd :l

@@ -26,19 +26,9 @@ class Parser:
         self.parser = yacc.yacc(module=self, **kwargs)
         program = self.parser.parse(lexer=self.lexer.lexer)
         Command.exec(program, self)
-    
-    def checkVar(self, var):
-        if var in self.vars:
-            return self.vars[var]
-        else:
-            print("ERRRRRRRRROOU!!!")
 
     def value(self, val):
 
-        """
-        Código do Prof para verificar se é um dicionário,
-        tem mais código que pode ser necessário, aqui apaguei algum
-        """
         if type(val) == dict and "operator" in val:
             left = self.value(val["left"])
             right = self.value(val["right"])
@@ -62,6 +52,10 @@ class Parser:
         if type(val) == tuple:
             return val
 
+        # Verifica se é uma variável
+        if val in self.vars:
+            return self.vars[val]
+
         print(f"Variable {val} undefined")
         return 0
 
@@ -84,30 +78,56 @@ class Parser:
         lst.append(p[2])
         p[0] = lst
 
+    def p_var(self, p):
+        """ var : VAR
+                | '"' VAR
+                | ':' VAR """
+
+        if len(p) == 3:
+            p[0] = p[2]
+        else:
+            p[0] = p[1]
+
     def p_command0(self, p):
         """ command : forward NUMBER 
-                    | fd NUMBER """
+                    | fd NUMBER 
+                    | forward var
+                    | fd var """
+        
         p[0] = Command("forward", p[2])
 
     def p_command1(self, p):
         """ command : right NUMBER 
-                    | rt NUMBER """
+                    | rt NUMBER
+                    | right var
+                    | rt var """
+
         p[0] = Command("right", p[2])
 
     def p_command2(self, p):
         """ command : backward NUMBER 
-                    | bk NUMBER """
+                    | bk NUMBER
+                    | backward ':' VAR
+                    | bk ':' VAR """
         p[0] = Command("backward", p[2])
 
     def p_command3(self, p):
         """ command : left NUMBER 
-                    | lt NUMBER """
+                    | lt NUMBER
+                    | left ':' VAR
+                    | lt ':' VAR """
         p[0] = Command("left", p[2])
 
     # SETPOS | SETXY
     def p_command4(self, p):
         """ command : setpos '[' NUMBER NUMBER ']'
-                    | setxy NUMBER NUMBER"""
+                    | setxy NUMBER NUMBER
+                    | setpos '[' ':' VAR NUMBER ']'
+                    | setpos '[' NUMBER ':' VAR ']'
+                    | setpos '[' ':' VAR ':' VAR ']'
+                    | setxy ':' VAR NUMBER
+                    | setxy NUMBER ':' VAR
+                    | setxy ':' VAR ':' VAR """
         
         # Obrigado Professor
         if len(p) == 6:
@@ -116,11 +136,13 @@ class Parser:
             p[0] = Command("setpos", {"x": p[2], "y": p[3]})
 
     def p_command5(self, p):
-        """ command : setx NUMBER """
+        """ command : setx NUMBER 
+                    | setx ':' VAR"""
         p[0] = Command("setx", p[2])
 
     def p_command6(self, p):
-        """ command : sety NUMBER """
+        """ command : sety NUMBER
+                    | sety ':' VAR """
         p[0] = Command("sety", p[2])
 
     def p_command7(self, p):
@@ -138,7 +160,14 @@ class Parser:
         p[0] = Command("penup", "")
     
     def p_command10(self, p):
-        """ command : setpencolor '[' NUMBER NUMBER NUMBER ']' """
+        """ command : setpencolor '[' NUMBER NUMBER NUMBER ']'
+                    | setpencolor '[' NUMBER NUMBER ':' VAR ']'
+                    | setpencolor '[' NUMBER ':' VAR NUMBER ']'
+                    | setpencolor '[' NUMBER ':' VAR ':' VAR ']'
+                    | setpencolor '[' ':' VAR NUMBER NUMBER ']'
+                    | setpencolor '[' ':' VAR NUMBER ':' VAR ']'
+                    | setpencolor '[' ':' VAR ':' VAR NUMBER ']'
+                    | setpencolor '[' ':' VAR ':' VAR ':' VAR ']' """
 
         color = (p[3], p[4], p[5])
 
@@ -157,3 +186,18 @@ class Parser:
             else:
                 p[0] = Command("make", {"make": 3, "var1": p[3], "number": p[4], "operator": p[5], "var2": p[7]})
     
+    
+    def p_command12(self, p):
+        """ command : repeat NUMBER '[' program ']' 
+                    | repeat ':' VAR '[' program ']' """
+
+        if p[2] == "NUMBER":
+            p[0] = Command("repeat", {"repeat": 1, "number": p[2], "code": p[4]})
+        else:
+            p[0] = Command("repeat", {"repeat": 2, "var": p[3], "code": p[5]})
+
+
+    def p_command13(self, p):
+        """ command : while '[' ':' VAR SIGN NUMBER ']' '[' program ']' """
+        
+        p[0] = Command("while", {'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]})

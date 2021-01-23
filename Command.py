@@ -61,7 +61,8 @@ def do_make(command, parser):
         # make "i :k − 1
 
         var = command.args['var1'] # variável a ser guardada
-        left = parser.checkVar(command.args['var2']) # valor da variável
+        #left = parser.checkVar(command.args['var2']) # valor da variável
+        left = parser.value(command.args['var2']) # valor da variável
         right = parser.value(command.args['number'])
         operator = command.args['operator']
 
@@ -70,15 +71,14 @@ def do_make(command, parser):
         result = parser.value(operation)
         parser.vars[var] = result
 
-        print(result)
-
     elif command.args["make"] == 3:
         # make '"' VAR NUMBER OPERATOR ':' VAR
         #   1   2   3   4       5       6   7
         # make "l 1.75 * :l
 
         var = command.args['var1'] # variável a ser guardada
-        right = parser.checkVar(command.args['var2']) # valor da variável
+        #right = parser.checkVar(command.args['var2']) # valor da variável
+        right = parser.value(command.args['var2']) # valor da variável
         left = parser.value(command.args['number'])
         operator = command.args['operator']
 
@@ -87,20 +87,39 @@ def do_make(command, parser):
         result = parser.value(operation)
         parser.vars[var] = result
 
-        print(result)
-
-
     print(parser.vars)
 
+def do_repeat(command, parser):
+    code = command.args['code']
+    i = 0
 
-#    var1 = command.args['var1']
-#    var2 = command.args['var2']
-#    op = command.args['operator']
-#    value = parser.value(command.args['number'])
+    if command.args["repeat"] == 1:
+        repeat = parser.value(command.args['number'])
+    else:
+#        repeat = parser.checkVar(command.args['var'])
+        repeat = parser.value(command.args['var'])
 
-#    for i, var1 in parser.vars[]:
+    while i < repeat:
+        Command.exec(code, parser)
+        i += 1
 
-#    parser.vars[var] = value
+# while [ :i > 0 ] [ code ]
+def do_while(command, parser):
+
+# "while", {'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]}
+
+    code = command.args['code']
+#    val = parser.checkVar(command.args['var'])
+    val = parser.value(command.args['var'])
+    number = parser.value(command.args['number'])
+    sign = command.args['sign']
+
+    if sign == ">":
+        while val > number:
+            Command.exec(code, parser)
+    else:
+        while val < number:
+            Command.exec(code, parser)
 
 
 class Command:
@@ -117,6 +136,8 @@ class Command:
         "penup": set_penup,
         "pencolor": set_pencolor,
         "make": do_make,
+        "repeat": do_repeat,
+        "while": do_while,
     }
 
     def __init__(self, command, args):
