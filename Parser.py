@@ -10,8 +10,6 @@ class Parser:
     
     tokens = Lexer.tokens
 
-    # Tem de ter um sitio para guardar o parser
-    # Tem de ter um sitio para guardar o lexer
     def __init__(self):
         self.parser = None
         self.lexer = None
@@ -24,7 +22,6 @@ class Parser:
         self.lexer.Build(input, **kwargs)
         self.parser = yacc.yacc(module=self, **kwargs)
         program = self.parser.parse(lexer=self.lexer.lexer)
-        print(program)
         Command.exec(program, self)
 
     def value(self, val):
@@ -52,7 +49,6 @@ class Parser:
         if type(val) == tuple:
             return val
 
-        # Verifica se é uma variável e devolve valor da variável
         if val in self.vars:
             return self.vars[val]
 
@@ -66,12 +62,10 @@ class Parser:
             print(f"(Parser.py) Unexpected token '{p}'", file=sys.stderr)
         exit(1)
 
-    # Isto é um programa
     def p_program0(self, p):
         """ program : command """
         p[0] = [p[1]]
 
-    # Isto é a recursividade de um programa
     def p_program1(self, p):
         """ program : program command """
         lst = p[1]
@@ -80,13 +74,8 @@ class Parser:
 
     def p_value(self, p):
         """ value   : NUMBER
-                    | '"' VAR
-                    | ':' VAR """
-
-        if len(p) == 2:
-            p[0] = p[1]
-        else:
-            p[0] = p[2]
+                    | VAR """
+        p[0] = p[1]
 
     def p_command0(self, p):
         """ command : forward value 
