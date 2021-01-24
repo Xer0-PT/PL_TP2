@@ -68,9 +68,15 @@ while [ :a < 100 ] [
     make "a :a + 1
 ]
 
-if 10 > 5 [ rt 90 fd 30]
+if 10 > 5 [ rt 90 fd 30 ]
 
 if :a > 1 [ fd 100 ]
+
+make "x 100
+make "y 200
+
+ifelse :x < :y [ rt 90 fd :y ] [ bk :y ]
+ifelse :x > :y [ fd :y ] [ lt 90 bk :y ]
 
 make "b 30
 

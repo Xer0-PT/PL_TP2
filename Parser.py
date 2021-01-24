@@ -145,10 +145,11 @@ class Parser:
         """ command : make value value
                     | make value value OPERATOR value """
 
-        if len(p) == 4:
-            args = {'var': p[2], 'val1': p[3]}
-        else:
-            args = {'var': p[2], 'val1': p[3], 'operator': p[4], 'val2': p[5]}
+        args = {'var': p[2], 'val1': p[3]}
+
+        if len(p) == 6:
+            args['operator'] =  p[4]
+            args['val2'] = p[5]
 
         p[0] = Command("make", args)
     
@@ -167,10 +168,10 @@ class Parser:
         """ command : if value SIGN value '[' program ']'
                     | ifelse value SIGN value '[' program ']' '[' program ']' """
 
-        if len(p) == 8:
-            args = {'value1': p[2], 'sign': p[3], 'value2': p[4], 'code1': p[6]}
-        else:
-            args = {'value1': p[2], 'sign': p[3], 'value2': p[4], 'code1': p[6], 'code2': p[9]}
+        args = {'value1': p[2], 'sign': p[3], 'value2': p[4], 'code1': p[6]}
+
+        if len(p) == 11:
+            args['code2'] = p[9]
 
         p[0] = Command("if", args)
 
