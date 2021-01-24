@@ -1,5 +1,3 @@
-make "a 255
+TO OLA :a :b :c repeat :a [ fd :b rt :c ] END
 
-setpencolor [ 0 :a :a ]
-
-fd 100
+OLA 4 100 90

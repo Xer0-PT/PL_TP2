@@ -46,19 +46,15 @@ def set_pencolor(command, parser):
     parser.turtle.PenColor(color)
 
 def do_make(command, parser):
+    var = command.args['var']
+    left = parser.value(command.args['val1'])
 
-    if len(command.args) == 2:
-        var = command.args['val1']
-        value = parser.value(command.args['val2'])
-        parser.vars[var] = value
-    else:
-        var = command.args['val1']
-        left = parser.value(command.args['val2'])
-        right = parser.value(command.args['val3'])
+    if len(command.args) == 2: # sem operador
+        parser.vars[var] = left
+    else: # com operador
+        right = parser.value(command.args['val2'])
         operator = command.args['operator']
-
         operation = {'left': left, 'operator': operator, 'right': right}
-
         result = parser.value(operation)
         parser.vars[var] = result
 
@@ -97,7 +93,7 @@ def do_if(command, parser):
         if try_if(sign, value1, value2) == True:
             Command.exec(code1, parser)
         else:
-            print("ERRRRROOUU!!!") # https://www.youtube.com/watch?v=qPl_ToZtDoQ
+            print("(Command.py) ERRRRROOUU!!!") # https://www.youtube.com/watch?v=qPl_ToZtDoQ
     else: # IFELSE
         code2 = command.args['code2']
 
@@ -117,7 +113,7 @@ def try_if(sign, val1, val2):
         if val1 == val2:
             return True
     else:
-        print("Unkown signal!")
+        print("(Command.py) Unkown signal!")
 
 def do_to(command, parser):
     funcname = command.args["name"]
@@ -125,11 +121,12 @@ def do_to(command, parser):
     params = command.args["args"]
     parser.funcs[funcname] = {"code": code, "args": params}
 
-def do_call(command, parser):
+def do_call(command, parser): # VER AULA DISTO
     funcname = command.args["name"]
     if funcname not in parser.funcs:
-        print(f"Unknown function '{funcname}'")
+        print(f"(Command.py) Unknown function '{funcname}'")
         exit(1)
+
     params = parser.funcs[funcname]["args"]
     code = parser.funcs[funcname]["code"]
     vals = command.args["args"]

@@ -48,7 +48,7 @@ class Lexer:
         return t
 
     def t_error(self, t):
-        print(f"Parser error. Unexpected char: {t.value[0]}", file=sys.stderr)
+        print(f"(Parser.py) Parser error. Unexpected char: {t.value[0]}", file=sys.stderr)
         exit(1)
 
     def __init__(self):

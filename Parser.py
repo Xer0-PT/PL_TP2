@@ -38,11 +38,11 @@ class Parser:
             elif op == "-": return left - right
             elif op == "/":
                 if right == 0:
-                    print("Division by zero")
+                    print("(Parser.py) Division by zero")
                     exit(1)
                 return left / right
             else:
-                print(f"Unknown operator: {op}")
+                print(f"(Parser.py) Unknown operator: {op}")
 
         if type(val) == float:
             if val < 0:
@@ -52,18 +52,18 @@ class Parser:
         if type(val) == tuple:
             return val
 
-        # Verifica se é uma variável
+        # Verifica se é uma variável e devolve valor da variável
         if val in self.vars:
             return self.vars[val]
 
-        print(f"Variable {val} undefined")
+        print(f"(Parser.py) Variable {val} undefined")
         return 0
 
 
     def p_error(self, p):
-        print("Syntax error", file=sys.stderr)
+        print("(Parser.py) Syntax error", file=sys.stderr)
         if p:
-            print(f"Unexpected token '{p}'", file=sys.stderr)
+            print(f"(Parser.py) Unexpected token '{p}'", file=sys.stderr)
         exit(1)
 
     # Isto é um programa
@@ -157,9 +157,9 @@ class Parser:
                     | make value value OPERATOR value """
 
         if len(p) == 4:
-            args = {'val1': p[2], 'val2': p[3]}
+            args = {'var': p[2], 'val1': p[3]}
         else:
-            args = {'val1': p[2], 'val2': p[3], 'operator': p[4], 'val3': p[5]}
+            args = {'var': p[2], 'val1': p[3], 'operator': p[4], 'val2': p[5]}
 
         p[0] = Command("make", args)
     
