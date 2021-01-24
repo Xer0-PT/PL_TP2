@@ -16,30 +16,34 @@ class Lexer:
         r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
             (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while|if|ifelse|TO|END"""
         t.type = t.value.replace(" ", "")
-        print(t.value)
+        #print(t)
         return t
 
     def t_OPERATOR(self, t):
         r"[+]|[-]|[/]|[*]"
+        #print(t)
         return t
 
     def t_STR(self, t):
         r"[A-Z]+"
-        print(t.value)
+        #print(t)
         return t
 
     def t_VAR(self, t):
         r"[a-z]+"
-        #print(t.value)
+        #r"([\"]|[:])[a-z]+"
+        #print(t)
         return t
     
     def t_SIGN(self,t):
         r"[>]|[<]|[=]"
+        #print(t)
         return t
 
     def t_NUMBER(self, t):
         r"[0-9.]+"
         t.value = float(t.value)
+        #print(t)
         return t
 
     def t_error(self, t):

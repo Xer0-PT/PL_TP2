@@ -77,9 +77,9 @@ def do_repeat(command, parser):
     code = command.args['code']
     i = 0
 
-    if command.args["repeat"] == 1:
+    if command.args['repeat'] == 1:
         repeat = parser.value(command.args['number'])
-    else:
+    if command.args['repeat'] == 2:
         repeat = parser.value(command.args['var'])
 
     while i < repeat:
@@ -102,7 +102,7 @@ def do_while(command, parser):
             val = parser.value(command.args['var'])
 
 
-def do_if(command, parser):
+def do_if(command, parser): # FIXME
     code = command.args['code']
     sign = command.args['sign']
 
@@ -119,6 +119,7 @@ def do_if(command, parser):
         var = parser.value(command.args['var'])
         number = parser.value(command.args['number'])
 
+        print(var)
         if try_if(sign, var, number) == True:
             Command.exec(code, parser)
         else:
@@ -133,7 +134,7 @@ def do_if(command, parser):
         else:
             print("Wrong math!")
 
-def do_ifelse(command, parser):
+def do_ifelse(command, parser): # FIXME
     code1 = command.args['code1']
     code2 = command.args['code2']
     sign = command.args['sign']

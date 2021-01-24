@@ -1,55 +1,77 @@
-make "i 1
-make "l 45
+make "a 1
 
 forward 1
-right 45
 fd 1
-rt 45
-forward :i
-right :l
-fd :i
-rt :l
+forward :a
+fd :a
 
-make "a 20
-make "b 10
-back 10
-left 20
-bk 10
-lt 10
+right 1
+rt 1
+right :a
+rt :a
+
+back 1
+bk 1
 back :a
-left :b
 bk :a
-lt :b
 
-setpos [ 140 140 ]
-setxy 10 10
+left 1
+lt 1
+left :a
+lt :a
+
+setpos [ 100 100 ]
+setxy 100 100
 setpos [ :a 100 ]
 setpos [ 100 :a ]
-setpos [ :a :b ]
-setxy :b 10
+setpos [ :a :a ]
+setxy :a 10
 setxy 10 :a
-setxy :a :b
+setxy :a :a
 
-setx 20
+setx 1
 setx :a
 
-sety 20
-sety :b
+sety 1
+sety :a
 
-setpencolor [ 100 100 100 ]
-setpencolor [ 100 100 :a ]
-setpencolor [ 100 :a 100 ]
-setpencolor [ 100 :a :b ]
-setpencolor [ :a 100 100 ] 
-setpencolor [ :b 100 :a ]
-setpencolor [ :a :a 100 ]
-setpencolor [ :a :b :i ]
+home
 
-make "i 10
-make "l 2
+penup
+pu
 
-while [ :i > 0 ] [
-    fd :l rt 90
-    make "i :i - 1
-    make "l 1.75 * :l
+pendown
+pd
+
+setpencolor [ 1 1 1 ]
+setpencolor [ 1 1 :a ]
+setpencolor [ 1 :a 1 ]
+setpencolor [ 1 :a :a ]
+setpencolor [ :a 1 1 ]
+setpencolor [ :a 1 :a ]
+setpencolor [ :a :a 1 ]
+setpencolor [ :a :a :a ]
+
+make "a 4
+make "b 10
+make "c :b * 5
+make "d 5 * :c
+
+make "a 4
+make "b 30
+
+repeat :a [ fd :b rt 90]
+repeat 4 [ fd 10 rt 90]
+
+while [ :a < 100 ] [
+    fd 1
+    make "a :a + 1
 ]
+
+if 10 > 5 [ rt 90 fd 30]
+if :a > 1 [ fd 100 ]
+
+make "b 30
+
+if :b > 5 [ fd 1 ]
+

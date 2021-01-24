@@ -19,7 +19,6 @@ class Parser:
         self.vars = {}
         self.funcs = {}
 
-    # Recebe o ficheiro/texto a que vai fazer parse
     def Parse(self, input, **kwargs):
         self.lexer = Lexer()
         self.lexer.Build(input, **kwargs)
@@ -63,7 +62,6 @@ class Parser:
     def p_error(self, p):
         print("Syntax error", file=sys.stderr)
         if p:
-            print(p)
             print(f"Unexpected token '{p.type}'", file=sys.stderr)
         exit(1)
 
@@ -134,25 +132,30 @@ class Parser:
                     | setxy ':' VAR ':' VAR """
         
         # Obrigado Professor
-        if len(p) == 6: #setpos '[' NUMBER NUMBER ']'
-            if p[1] == 'setpos': #setpos '[' NUMBER NUMBER ']'
-                p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-            else: # setxy ':' VAR ':' VAR """
-                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
-        elif len(p) == 7:  #setpos '[' ':' VAR NUMBER ']'
-            if p[3] == ':': #setpos '[' ':' VAR NUMBER ']'
-                p[0] = Command("setpos", {"x": p[4], "y": p[5]})
-            else: #setpos 'setpos '[' NUMBER ':' VAR ']'
-                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
-        elif len(p) == 8: #setpos '[' VAR ':' VAR ']'
-            p[0] = Command("setpos", {"x": p[4], "y": p[6]})
-        elif len(p) == 4: #setxy NUMBER NUMBER
+        if len(p) == 4: # setxy NUMBER NUMBER
             p[0] = Command("setpos", {"x": p[2], "y": p[3]})
-        elif len(p) == 5: #setxy ':' VAR NUMBER
-            if p[2] == ':':#setxy ':' VAR NUMBER
+
+        elif len(p) == 5:
+            if p[2] == ':': # setxy ':' VAR NUMBER
                 p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-            else: #setxy NUMBER ':' VAR
+            else: # setxy NUMBER ':' VAR
                 p[0] = Command("setpos", {"x": p[2], "y": p[4]})
+
+        elif len(p) == 6:
+            if p[2] == '[': #setpos '[' NUMBER NUMBER ']'
+                p[0] = Command("setpos", {"x": p[3], "y": p[4]})
+            else:# setxy ':' VAR ':' VAR
+                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
+
+        elif len(p) == 7: 
+            if p[3] == ':': # setpos '[' ':' VAR NUMBER ']'
+                p[0] = Command("setpos", {"x": p[4], "y": p[5]})
+            else: # setpos '[' NUMBER ':' VAR ']'
+                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
+
+        elif len(p) == 8: #setpos '[' ':' VAR ':' VAR ']'
+            p[0] = Command("setpos", {"x": p[4], "y": p[6]})
+                
         
 
     def p_command5(self, p):
@@ -198,6 +201,7 @@ class Parser:
         if len(p) == 7: #setpencolor '[' NUMBER NUMBER NUMBER ']' 
             color = (p[3], p[4], p[5])
             p[0] = Command("pencolor", color)
+
         elif len(p) == 8:
             if p[5] == ':': #setpencolor '[' NUMBER NUMBER ':' VAR ']' 
                 color = (p[3], p[4], p[6])
@@ -208,16 +212,18 @@ class Parser:
             else: # setpencolor '[' ':' VAR NUMBER NUMBER ']' #8
                 color = (p[4], p[5], p[6])
                 p[0] = Command("pencolor", color)
+
         elif len(p) == 9:
-            if p[3] == 'NUMBER': #setpencolor '[' NUMBER ':' VAR ':' VAR ']'
+            if p[5] == ':': #setpencolor '[' NUMBER ':' VAR ':' VAR ']'
                 color = (p[3], p[5], p[7])
                 p[0] = Command("pencolor", color)
-            elif p[5] == 'NUMBER': #setpencolor '[' ':' VAR NUMBER ':' VAR ']' 
+            elif p[3] == ':': #setpencolor '[' ':' VAR NUMBER ':' VAR ']' 
                 color = (p[4], p[5], p[7])
                 p[0] = Command("pencolor", color)
             else: # setpencolor '[' ':' VAR ':' VAR NUMBER ']'
                 color = (p[4], p[6], p[7])
                 p[0] = Command("pencolor", color)
+
         else: #setpencolor '[' ':' VAR ':' VAR ':' VAR ']'
             color = (p[4], p[6], p[8])
             p[0] = Command("pencolor", color)
@@ -229,6 +235,7 @@ class Parser:
 
         if len(p) == 5:
             p[0] = Command("make", {"make": 1, "var": p[3], "number": p[4]})
+        
         if len(p) == 8:
             if p[4] == ":":
                 p[0] = Command("make", {"make": 2, "var1": p[3], "var2": p[5], "operator": p[6],"number": p[7]})
@@ -239,10 +246,10 @@ class Parser:
         """ command : repeat NUMBER '[' program ']' 
                     | repeat ':' VAR '[' program ']' """
 
-        if p[2] == "NUMBER":
-            p[0] = Command("repeat", {"repeat": 1, "number": p[2], "code": p[4]})
-        else:
+        if p[2] == ":":
             p[0] = Command("repeat", {"repeat": 2, "var": p[3], "code": p[5]})
+        else:
+            p[0] = Command("repeat", {"repeat": 1, "number": p[2], "code": p[4]})
 
     def p_command13(self, p):
         """ command : while '[' ':' VAR SIGN NUMBER ']' '[' program ']' """
@@ -251,21 +258,21 @@ class Parser:
         p[0] = Command("while", {'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]})
 
     def p_command14(self, p):
-        """ command : if NUMBER SIGN NUMBER '[' program ']'
-                    | if ':' VAR SIGN NUMBER '[' program ']'
-                    | if  NUMBER SIGN ':' VAR '[' program ']'
-                    | if ':' VAR SIGN ':' VAR '[' program ']'
-                    | if '[' NUMBER SIGN NUMBER ']' '[' program ']'
-                    | if '[' ':' VAR SIGN NUMBER ']' '[' program ']'
-                    | if '[' NUMBER SIGN ':' VAR ']' '[' program ']'
-                    | if '[' ':' VAR SIGN ':' VAR ']' '[' program ']' """
+        """ command : if NUMBER SIGN NUMBER             '[' program ']'
+                    | if ':' VAR SIGN NUMBER            '[' program ']'
+                    | if  NUMBER SIGN ':' VAR           '[' program ']'
+                    | if ':' VAR SIGN ':' VAR           '[' program ']'
+                    | if '[' NUMBER SIGN NUMBER ']'     '[' program ']'
+                    | if '[' ':' VAR SIGN NUMBER ']'    '[' program ']'
+                    | if '[' NUMBER SIGN ':' VAR ']'    '[' program ']'
+                    | if '[' ':' VAR SIGN ':' VAR ']'   '[' program ']' """
 
         if len(p) == 8:
             p[0] = Command("if", {'if':1, 'number1': p[2], 'sign': p[3], 'number2': p[4], 'code': p[6]})
         elif len(p) == 9:
             if p[2] == ':':
                 p[0] = Command("if", {'if':2,'var': p[3], 'sign': p[4], 'number': p[5], 'code': p[7]})
-            else:
+            else: # if  NUMBER SIGN ':' VAR '[' program ']'
                 p[0] = Command("if", {'if':2, 'number': p[2], 'sign': p[3], 'var': p[5], 'code': p[7]})
         elif len(p) == 10:
             if p[2] == ':':
@@ -281,14 +288,14 @@ class Parser:
             p[0] = Command("if", {'if':3, 'var1': p[4], 'sign': p[5], 'var2': p[7], 'code': p[10]})
 
     def p_command15(self, p):
-        """ command : ifelse NUMBER SIGN NUMBER '[' program ']' '[' program ']'
-                    | ifelse ':' VAR SIGN NUMBER '[' program ']' '[' program ']'
-                    | ifelse NUMBER SIGN ':' VAR '[' program ']' '[' program ']'
-                    | ifelse ':' VAR SIGN ':' VAR '[' program ']' '[' program ']'
-                    | ifelse '[' NUMBER SIGN NUMBER ']' '[' program ']' '[' program ']'
-                    | ifelse '[' ':' VAR SIGN NUMBER ']' '[' program ']' '[' program ']'
-                    | ifelse '[' NUMBER SIGN ':' VAR ']' '[' program ']' '[' program ']'
-                    | ifelse '[' ':' VAR SIGN ':' VAR ']' '[' program ']' '[' program ']' """
+        """ command : ifelse NUMBER SIGN NUMBER             '[' program ']' '[' program ']'
+                    | ifelse ':' VAR SIGN NUMBER            '[' program ']' '[' program ']'
+                    | ifelse NUMBER SIGN ':' VAR            '[' program ']' '[' program ']'
+                    | ifelse ':' VAR SIGN ':' VAR           '[' program ']' '[' program ']'
+                    | ifelse '[' NUMBER SIGN NUMBER ']'     '[' program ']' '[' program ']'
+                    | ifelse '[' ':' VAR SIGN NUMBER ']'    '[' program ']' '[' program ']'
+                    | ifelse '[' NUMBER SIGN ':' VAR ']'    '[' program ']' '[' program ']'
+                    | ifelse '[' ':' VAR SIGN ':' VAR ']'   '[' program ']' '[' program ']' """
 
         if len(p) == 11:
                 p[0] = Command("ifelse", {'ifelse':1, 'number1': p[2], 'sign': p[3], 'number2': p[4], 'code1': p[6], 'code2': p[9]})
@@ -320,12 +327,12 @@ class Parser:
             p[0] = [p[2]]
         else:
             p[0] = p[1]
-            p[0].append(p[4])
+            p[0].append(p[3])
 
     def p_command16(self, p):        
-        """ command : TO STR varlist '[' program ']' END """
+        """ command : TO STR varlist program END """
 
-        p[0] = Command("to", {'name': p[2], 'args': p[3], 'code': p[5]})
+        p[0] = Command("to", {'name': p[2], 'args': p[3], 'code': p[4]})
 
     def p_valuelist(self, p):
         """ valuelist :

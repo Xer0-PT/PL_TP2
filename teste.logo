@@ -1,4 +1,3 @@
+TO STAR :n repeat 5 [ fd :n rt 144 ] END
 
-TO TESTE :a [fd :a rt 90 fd :a] END
-
-TESTE 100
+STAR 100
