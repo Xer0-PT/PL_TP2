@@ -231,7 +231,7 @@ class Parser:
     def p_command11(self, p):
         """ command : make '"' VAR NUMBER
                     | make '"' VAR ':' VAR OPERATOR NUMBER
-                    | make '"' VAR NUMBER OPERATOR ':' VAR """
+                    | make '"' VAR NUMBER OPERATOR ':' VAR """ # Primeira variavel é sempre a que é guardada
 
         if len(p) == 5:
             p[0] = Command("make", {"make": 1, "var": p[3], "number": p[4]})

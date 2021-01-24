@@ -75,3 +75,6 @@ make "b 30
 
 if :b > 5 [ fd 1 ]
 
+TO OLA :a :b :c repeat :a [ fd :b rt :c] END
+
+OLA 4 100 90

@@ -39,22 +39,20 @@ def set_penup(command, parser):
     parser.turtle.PenUp()
 
 def set_pencolor(command, parser):
-    r = parser.value(command.args['r'])
-    g = parser.value(command.args['g'])
-    b = parser.value(command.args['b'])
-    color = (r, g, b)
+    color = parser.value(command.args)
     parser.turtle.PenColor(color)
 
 def do_make(command, parser):
-
-    if len(command.args) == 2:
-        var = command.args['val1']
-        value = parser.value(command.args['val2'])
+    if command.args["make"] == 1:
+        var = command.args['var']
+        value = parser.value(command.args['number'])
         parser.vars[var] = value
-    else:
-        var = command.args['val1']
-        left = parser.value(command.args['val2'])
-        right = parser.value(command.args['val3'])
+    
+    elif command.args["make"] == 2:
+
+        var = command.args['var1'] # variável a ser guardada
+        left = parser.value(command.args['var2']) # valor da variável
+        right = parser.value(command.args['number'])
         operator = command.args['operator']
 
         operation = {'left': left, 'operator': operator, 'right': right}
@@ -62,10 +60,27 @@ def do_make(command, parser):
         result = parser.value(operation)
         parser.vars[var] = result
 
+    elif command.args["make"] == 3:
+        
+        var = command.args['var1'] # variável a ser guardada
+        right = parser.value(command.args['var2']) # valor da variável
+        left = parser.value(command.args['number'])
+        operator = command.args['operator']
+
+        operation = {'left': left, 'operator': operator, 'right': right}
+
+        result = parser.value(operation)
+        parser.vars[var] = result
+
+
 def do_repeat(command, parser):
-    repeat = parser.value(command.args['value'])
     code = command.args['code']
     i = 0
+
+    if command.args['repeat'] == 1:
+        repeat = parser.value(command.args['number'])
+    if command.args['repeat'] == 2:
+        repeat = parser.value(command.args['var'])
 
     while i < repeat:
         Command.exec(code, parser)
@@ -73,35 +88,80 @@ def do_repeat(command, parser):
 
 def do_while(command, parser):
     code = command.args['code']
-    value1 = parser.value(command.args['value1'])
-    value2 = parser.value(command.args['value2'])
+    val = parser.value(command.args['var'])
+    number = parser.value(command.args['number'])
     sign = command.args['sign']
 
     if sign == '>':
-        while value1 > value2:
+        while val > number:
             Command.exec(code, parser)
-            value1 = parser.value(command.args['value1'])
+            val = parser.value(command.args['var'])
     elif sign == '<':
-        while value1 < value2:
+        while val < number:
             Command.exec(code, parser)
-            value1 = parser.value(command.args['value1'])
+            val = parser.value(command.args['var'])
 
-# IF | IFELSE
-def do_if(command, parser):
-    code1 = command.args['code1']
-    value1 = parser.value(command.args['value1'])
-    value2 = parser.value(command.args['value2'])
+
+def do_if(command, parser): # FIXME
+    code = command.args['code']
     sign = command.args['sign']
 
-    if len(command.args) == 4: # IF
-        if try_if(sign, value1, value2) == True:
-            Command.exec(code1, parser)
+    if command.args['if'] == 1:
+        number1 = parser.value(command.args['number1'])
+        number2 = parser.value(command.args['number2'])
+
+        if try_if(sign, number1, number2) == True:
+            Command.exec(code, parser)
         else:
             print("ERRRRROOUU!!!") # https://www.youtube.com/watch?v=qPl_ToZtDoQ
-    else: # IFELSE
-        code2 = command.args['code2']
 
-        if try_if(sign, value1, value2) == True:
+    elif command.args['if'] == 2:
+        var = parser.value(command.args['var'])
+        number = parser.value(command.args['number'])
+
+        print(var)
+        if try_if(sign, var, number) == True:
+            Command.exec(code, parser)
+        else:
+            print("Wrong math!")
+
+    else:
+        var1 = parser.value(command.args['var1'])
+        var2 = parser.value(command.args['var2'])
+
+        if try_if(sign, var1, var2) == True:
+            Command.exec(code, parser)
+        else:
+            print("Wrong math!")
+
+def do_ifelse(command, parser): # FIXME
+    code1 = command.args['code1']
+    code2 = command.args['code2']
+    sign = command.args['sign']
+
+    if command.args['ifelse'] == 1:
+        number1 = parser.value(command.args['number1'])
+        number2 = parser.value(command.args['number2'])
+
+        if try_if(sign, number1, number2) == True:
+            Command.exec(code1, parser)
+        else:
+            Command.exec(code2, parser)
+
+    elif command.args['ifelse'] == 2:
+        var = parser.value(command.args['var'])
+        number = parser.value(command.args['number'])
+
+        if try_if(sign, var, number) == True:
+            Command.exec(code1, parser)
+        else:
+            Command.exec(code2, parser)
+
+    else:
+        var1 = parser.value(command.args['var1'])
+        var2 = parser.value(command.args['var2'])
+
+        if try_if(sign, var1, var2) == True:
             Command.exec(code1, parser)
         else:
             Command.exec(code2, parser)
@@ -141,6 +201,7 @@ def do_call(command, parser):
     Command.exec(code, parser)
     parser.vars = backup_vars.copy()
 
+
 class Command:
     dispatch_table = {
         "forward": go_forward,
@@ -158,6 +219,7 @@ class Command:
         "repeat": do_repeat,
         "while": do_while,
         "if": do_if,
+        "ifelse": do_ifelse,
         "to": do_to,
         "call": do_call,
     }

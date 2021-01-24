@@ -14,8 +14,9 @@ class Lexer:
 
     def t_COMMAND(self, t):
         r"""(forward|fd)|(back|bk)|(left|lt)|(right|rt)|setpos|setxy|setx|sety|home|
-            (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while|if|ifelse|TO|END"""
-        t.type = t.value.replace(" ", "")
+            (pendown|pd)|(penup|pu)|setpencolor|make|repeat|while|if(else)?|TO|END"""
+        #t.type = t.value.replace(" ", "") <- O prof fez isto por causa do END FOR, como não temos tokens com espaços, não precisamos
+        t.type = t.value
         #print(t)
         return t
 

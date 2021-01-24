@@ -24,6 +24,7 @@ class Parser:
         self.lexer.Build(input, **kwargs)
         self.parser = yacc.yacc(module=self, **kwargs)
         program = self.parser.parse(lexer=self.lexer.lexer)
+        print(program)
         Command.exec(program, self)
 
     def value(self, val):
@@ -62,7 +63,7 @@ class Parser:
     def p_error(self, p):
         print("Syntax error", file=sys.stderr)
         if p:
-            print(f"Unexpected token '{p.type}'", file=sys.stderr)
+            print(f"Unexpected token '{p}'", file=sys.stderr)
         exit(1)
 
     # Isto é um programa
@@ -77,103 +78,61 @@ class Parser:
         lst.append(p[2])
         p[0] = lst
 
-    def p_command0(self, p):
-        """ command : forward NUMBER 
-                    | fd NUMBER 
-                    | forward ':' VAR
-                    | fd ':' VAR """
-        
-        if len(p) == 3:
-            p[0] = Command("forward", p[2])
+    def p_value(self, p):
+        """ value   : NUMBER
+                    | '"' VAR
+                    | ':' VAR """
+
+        if len(p) == 2:
+            p[0] = p[1]
         else:
-            p[0] = Command("forward", p[3])
+            p[0] = p[2]
+
+    def p_command0(self, p):
+        """ command : forward value 
+                    | fd value """
+        
+        p[0] = Command("forward", p[2])
 
     def p_command1(self, p):
-        """ command : right NUMBER 
-                    | rt NUMBER
-                    | right ':' VAR
-                    | rt ':' VAR """
-        if len(p) == 3:
-            p[0] = Command("right", p[2])
-        else:
-            p[0] = Command("right", p[3])
+        """ command : right value 
+                    | rt value """
+        
+        p[0] = Command("right", p[2])
 
     def p_command2(self, p):
-        """ command : back NUMBER 
-                    | bk NUMBER
-                    | back ':' VAR
-                    | bk ':' VAR """
+        """ command : back value 
+                    | bk value """
 
-        if len(p) == 3:
-            p[0] = Command("backward", p[2])
-        else:
-            p[0] = Command("backward", p[3])
+        p[0] = Command("backward", p[2])
 
     def p_command3(self, p):
-        """ command : left NUMBER 
-                    | lt NUMBER
-                    | left ':' VAR
-                    | lt ':' VAR """
+        """ command : left value 
+                    | lt value """
 
-        if len(p) == 3:
-            p[0] = Command("left", p[2])
-        else:
-            p[0] = Command("left", p[3])
+        p[0] = Command("left", p[2])
 
     # SETPOS | SETXY
     def p_command4(self, p):
-        """ command : setpos '[' NUMBER NUMBER ']'
-                    | setxy NUMBER NUMBER
-                    | setpos '[' ':' VAR NUMBER ']'
-                    | setpos '[' NUMBER ':' VAR ']'
-                    | setpos '[' ':' VAR ':' VAR ']'
-                    | setxy ':' VAR NUMBER
-                    | setxy NUMBER ':' VAR
-                    | setxy ':' VAR ':' VAR """
+        """ command : setpos '[' value value ']'
+                    | setxy value value """
         
-        # Obrigado Professor
-        if len(p) == 4: # setxy NUMBER NUMBER
-            p[0] = Command("setpos", {"x": p[2], "y": p[3]})
+        if len(p) == 6:
+            args = {'x': p[3], 'y': p[4]}
+        else:
+            args = {'x': p[2], 'y': p[3]}
 
-        elif len(p) == 5:
-            if p[2] == ':': # setxy ':' VAR NUMBER
-                p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-            else: # setxy NUMBER ':' VAR
-                p[0] = Command("setpos", {"x": p[2], "y": p[4]})
-
-        elif len(p) == 6:
-            if p[2] == '[': #setpos '[' NUMBER NUMBER ']'
-                p[0] = Command("setpos", {"x": p[3], "y": p[4]})
-            else:# setxy ':' VAR ':' VAR
-                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
-
-        elif len(p) == 7: 
-            if p[3] == ':': # setpos '[' ':' VAR NUMBER ']'
-                p[0] = Command("setpos", {"x": p[4], "y": p[5]})
-            else: # setpos '[' NUMBER ':' VAR ']'
-                p[0] = Command("setpos", {"x": p[3], "y": p[5]})
-
-        elif len(p) == 8: #setpos '[' ':' VAR ':' VAR ']'
-            p[0] = Command("setpos", {"x": p[4], "y": p[6]})
-                
-        
+        p[0] = Command("setpos", args)                
 
     def p_command5(self, p):
-        """ command : setx NUMBER 
-                    | setx ':' VAR"""
-        if len(p) == 3:
-            p[0] = Command("setx", p[2])
-        else:
-            p[0] = Command("setx", p[3])
+        """ command : setx value """
 
+        p[0] = Command("setx", p[2])
+        
     def p_command6(self, p):
-        """ command : sety NUMBER
-                    | sety ':' VAR """
-        if len(p) == 3:
-            p[0] = Command("sety", p[2])
-        else:
-            p[0] = Command("sety", p[3])
-
+        """ command : sety value """
+        p[0] = Command("sety", p[2])
+        
     def p_command7(self, p):
         """ command : home """
         p[0] = Command("home", "")
@@ -189,145 +148,54 @@ class Parser:
         p[0] = Command("penup", "")
     
     def p_command10(self, p):
-        """ command : setpencolor '[' NUMBER NUMBER NUMBER ']'
-                    | setpencolor '[' NUMBER NUMBER ':' VAR ']'
-                    | setpencolor '[' NUMBER ':' VAR NUMBER ']'
-                    | setpencolor '[' NUMBER ':' VAR ':' VAR ']'
-                    | setpencolor '[' ':' VAR NUMBER NUMBER ']' 
-                    | setpencolor '[' ':' VAR NUMBER ':' VAR ']'
-                    | setpencolor '[' ':' VAR ':' VAR NUMBER ']'
-                    | setpencolor '[' ':' VAR ':' VAR ':' VAR ']' """
+        """ command : setpencolor '[' value value value ']' """
 
-        if len(p) == 7: #setpencolor '[' NUMBER NUMBER NUMBER ']' 
-            color = (p[3], p[4], p[5])
-            p[0] = Command("pencolor", color)
-
-        elif len(p) == 8:
-            if p[5] == ':': #setpencolor '[' NUMBER NUMBER ':' VAR ']' 
-                color = (p[3], p[4], p[6])
-                p[0] = Command("pencolor", color)
-            elif p[4] == ':': #setpencolor '[' NUMBER ':' VAR NUMBER ']'
-                color = (p[3], p[5], p[6])
-                p[0] = Command("pencolor", color)
-            else: # setpencolor '[' ':' VAR NUMBER NUMBER ']' #8
-                color = (p[4], p[5], p[6])
-                p[0] = Command("pencolor", color)
-
-        elif len(p) == 9:
-            if p[5] == ':': #setpencolor '[' NUMBER ':' VAR ':' VAR ']'
-                color = (p[3], p[5], p[7])
-                p[0] = Command("pencolor", color)
-            elif p[3] == ':': #setpencolor '[' ':' VAR NUMBER ':' VAR ']' 
-                color = (p[4], p[5], p[7])
-                p[0] = Command("pencolor", color)
-            else: # setpencolor '[' ':' VAR ':' VAR NUMBER ']'
-                color = (p[4], p[6], p[7])
-                p[0] = Command("pencolor", color)
-
-        else: #setpencolor '[' ':' VAR ':' VAR ':' VAR ']'
-            color = (p[4], p[6], p[8])
-            p[0] = Command("pencolor", color)
+        p[0] = Command("pencolor", {'r': p[3], 'g': p[4], 'b': p[5]})
             
     def p_command11(self, p):
-        """ command : make '"' VAR NUMBER
-                    | make '"' VAR ':' VAR OPERATOR NUMBER
-                    | make '"' VAR NUMBER OPERATOR ':' VAR """
+        """ command : make value value
+                    | make value value OPERATOR value """
 
-        if len(p) == 5:
-            p[0] = Command("make", {"make": 1, "var": p[3], "number": p[4]})
-        
-        if len(p) == 8:
-            if p[4] == ":":
-                p[0] = Command("make", {"make": 2, "var1": p[3], "var2": p[5], "operator": p[6],"number": p[7]})
-            else:
-                p[0] = Command("make", {"make": 3, "var1": p[3], "number": p[4], "operator": p[5], "var2": p[7]})
+        if len(p) == 4:
+            args = {'val1': p[2], 'val2': p[3]}
+        else:
+            args = {'val1': p[2], 'val2': p[3], 'operator': p[4], 'val3': p[5]}
+
+        p[0] = Command("make", args)
     
     def p_command12(self, p):
-        """ command : repeat NUMBER '[' program ']' 
-                    | repeat ':' VAR '[' program ']' """
+        """ command : repeat value '[' program ']' """
 
-        if p[2] == ":":
-            p[0] = Command("repeat", {"repeat": 2, "var": p[3], "code": p[5]})
-        else:
-            p[0] = Command("repeat", {"repeat": 1, "number": p[2], "code": p[4]})
+        p[0] = Command("repeat", {"value": p[2], "code": p[4]})
 
     def p_command13(self, p):
-        """ command : while '[' ':' VAR SIGN NUMBER ']' '[' program ']' """
-#                    | while '[' ':' VAR SIGN NUMBER ']' '[' program ']' """ FIXME
+        """ command : while '[' value SIGN value ']' '[' program ']' """
         
-        p[0] = Command("while", {'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]})
+        p[0] = Command("while", {'value1': p[3], 'sign': p[4], 'value2': p[5], 'code': p[8]})
 
+    # IF | IFELSE
     def p_command14(self, p):
-        """ command : if NUMBER SIGN NUMBER             '[' program ']'
-                    | if ':' VAR SIGN NUMBER            '[' program ']'
-                    | if  NUMBER SIGN ':' VAR           '[' program ']'
-                    | if ':' VAR SIGN ':' VAR           '[' program ']'
-                    | if '[' NUMBER SIGN NUMBER ']'     '[' program ']'
-                    | if '[' ':' VAR SIGN NUMBER ']'    '[' program ']'
-                    | if '[' NUMBER SIGN ':' VAR ']'    '[' program ']'
-                    | if '[' ':' VAR SIGN ':' VAR ']'   '[' program ']' """
+        """ command : if value SIGN value '[' program ']'
+                    | ifelse value SIGN value '[' program ']' '[' program ']' """
 
         if len(p) == 8:
-            p[0] = Command("if", {'if':1, 'number1': p[2], 'sign': p[3], 'number2': p[4], 'code': p[6]})
-        elif len(p) == 9:
-            if p[2] == ':':
-                p[0] = Command("if", {'if':2,'var': p[3], 'sign': p[4], 'number': p[5], 'code': p[7]})
-            else: # if  NUMBER SIGN ':' VAR '[' program ']'
-                p[0] = Command("if", {'if':2, 'number': p[2], 'sign': p[3], 'var': p[5], 'code': p[7]})
-        elif len(p) == 10:
-            if p[2] == ':':
-                p[0] = Command("if", {'if':3, 'var1': p[3], 'sign': p[4], 'var2': p[6], 'code': p[8]})
-            else:
-                p[0] = Command("if", {'if':1,'number1': p[3], 'sign': p[4], 'number2': p[5], 'code': p[8]})
-        elif len(p) == 11:
-            if p[3] == ':':
-                p[0] = Command("if", {'if':2, 'var': p[4], 'sign': p[5], 'number': p[6], 'code': p[9]})
-            else:
-                p[0] = Command("if", {'if':2, 'number': p[3], 'sign': p[4], 'var': p[6], 'code': p[9]})
+            args = {'value1': p[2], 'sign': p[3], 'value2': p[4], 'code1': p[6]}
         else:
-            p[0] = Command("if", {'if':3, 'var1': p[4], 'sign': p[5], 'var2': p[7], 'code': p[10]})
+            args = {'value1': p[2], 'sign': p[3], 'value2': p[4], 'code1': p[6], 'code2': p[9]}
 
-    def p_command15(self, p):
-        """ command : ifelse NUMBER SIGN NUMBER             '[' program ']' '[' program ']'
-                    | ifelse ':' VAR SIGN NUMBER            '[' program ']' '[' program ']'
-                    | ifelse NUMBER SIGN ':' VAR            '[' program ']' '[' program ']'
-                    | ifelse ':' VAR SIGN ':' VAR           '[' program ']' '[' program ']'
-                    | ifelse '[' NUMBER SIGN NUMBER ']'     '[' program ']' '[' program ']'
-                    | ifelse '[' ':' VAR SIGN NUMBER ']'    '[' program ']' '[' program ']'
-                    | ifelse '[' NUMBER SIGN ':' VAR ']'    '[' program ']' '[' program ']'
-                    | ifelse '[' ':' VAR SIGN ':' VAR ']'   '[' program ']' '[' program ']' """
-
-        if len(p) == 11:
-                p[0] = Command("ifelse", {'ifelse':1, 'number1': p[2], 'sign': p[3], 'number2': p[4], 'code1': p[6], 'code2': p[9]})
-        elif len(p) == 12:
-            if p[2] == ':':
-                p[0] = Command("ifelse", {'ifelse':2,'var': p[3], 'sign': p[4], 'number': p[5], 'code1': p[7], 'code2': p[10]})
-            else:
-                p[0] = Command("ifelse", {'ifelse':2, 'number': p[2], 'sign': p[3], 'var': p[5], 'code1': p[7], 'code2': p[10]})
-        elif len(p) == 13:
-            if p[2] == ':':
-                p[0] = Command("ifelse", {'ifelse':3, 'var1': p[3], 'sign': p[4], 'var2': p[6], 'code1': p[8], 'code2': p[11]})
-            else:
-                p[0] = Command("ifelse", {'ifelse':1,'number1': p[3], 'sign': p[4], 'number2': p[5], 'code1': p[8], 'code2': p[11]})
-        elif len(p) == 14:
-            if p[3] == ':':
-                p[0] = Command("ifelse", {'ifelse':2, 'var': p[4], 'sign': p[5], 'number': p[6], 'code1': p[9], 'code2': p[12]})
-            else:
-                p[0] = Command("ifelse", {'ifelse':2, 'number': p[3], 'sign': p[4], 'var': p[6], 'code1': p[9], 'code2': p[12]})
-        else:
-            p[0] = Command("ifelse", {'ifelse':3, 'var1': p[4], 'sign': p[5], 'var2': p[7], 'code1': p[10], 'code2': p[13]})
+        p[0] = Command("if", args)
 
     def p_varlist(self, p):
         """ varlist :
-                    | ':' VAR
-                    | varlist ':' VAR """
+                    | value
+                    | varlist value """
         if len(p) == 1:
             p[0] = []
-        elif len(p) == 3:
-            p[0] = [p[2]]
+        elif len(p) == 2:
+            p[0] = [p[1]]
         else:
             p[0] = p[1]
-            p[0].append(p[3])
+            p[0].append(p[2])
 
     def p_command16(self, p):        
         """ command : TO STR varlist program END """
@@ -336,8 +204,8 @@ class Parser:
 
     def p_valuelist(self, p):
         """ valuelist :
-                    | NUMBER
-                    | valuelist NUMBER """
+                        | value
+                        | valuelist value """
         if len(p) == 1:
             p[0] = []
         elif len(p) == 2:
@@ -349,4 +217,3 @@ class Parser:
     def p_command17(self, p):
         """ command : STR valuelist """
         p[0] = Command("call", {'name': p[1], 'args': p[2]})
-

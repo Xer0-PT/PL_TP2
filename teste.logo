@@ -1,3 +1,5 @@
-TO STAR :n repeat 5 [ fd :n rt 144 ] END
+make "a 255
 
-STAR 100
+setpencolor [ 0 :a :a ]
+
+fd 100
