@@ -121,7 +121,7 @@ def do_to(command, parser):
     params = command.args["args"]
     parser.funcs[funcname] = {"code": code, "args": params}
 
-def do_call(command, parser): # VER AULA DISTO
+def do_call(command, parser):
     funcname = command.args["name"]
     if funcname not in parser.funcs:
         print(f"(Command.py) Unknown function '{funcname}'")
@@ -159,7 +159,7 @@ class Command:
         "call": do_call,
     }
 
-    def __init__(self, command, args):
+    def __init__(self, command, args=""):
         self.name = command
         self.args = args
         

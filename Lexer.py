@@ -31,7 +31,7 @@ class Lexer:
         return t
     
     def t_SIGN(self,t):
-        r"[>]|[<]|[=]"
+        r">|[<]|[=]"
         return t
 
     def t_NUMBER(self, t):

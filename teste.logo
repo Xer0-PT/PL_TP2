@@ -1,106 +1,21 @@
-make "a 1
-
-forward 1
-fd 1
-forward :a
-fd :a
-
-right 1
-rt 1
-right :a
-rt :a
-
-back 1
-bk 1
-back :a
-bk :a
-
-left 1
-lt 1
-left :a
-lt :a
-
-setpos [ 100 100 ]
-setxy 100 100
-setpos [ :a 100 ]
-setpos [ 100 :a ]
-setpos [ :a :a ]
-setxy :a 10
-setxy 10 :a
-setxy :a :a
-
-setx 1
-setx :a
-
-sety 1
-sety :a
-
-home
-
-penup
-pu
-
-pendown
-pd
-
-setpencolor [ 1 1 1 ]
-setpencolor [ 1 1 :a ]
-setpencolor [ 1 :a 1 ]
-setpencolor [ 1 :a :a ]
-setpencolor [ :a 1 1 ]
-setpencolor [ :a 1 :a ]
-setpencolor [ :a :a 1 ]
-setpencolor [ :a :a :a ]
-
-make "a 4
-make "b 10
-make "c :b * 5
-make "d 5 * :c
-
-make "a 4
-make "b 30
-
-repeat :a [ fd :b rt 90]
-repeat 4 [ fd 10 rt 90]
-
-while [ :a < 100 ] [
-    fd 1
-    make "a :a + 1
-]
-
-if 10 > 5 [ rt 90 fd 30 ]
-
-if :a > 1 [ fd 100 ]
-
-make "x 100
-make "y 200
-
-ifelse :x < :y [ rt 90 fd :y ] [ bk :y ]
-ifelse :x > :y [ fd :y ] [ lt 90 bk :y ]
-
-make "b 30
-
-if :b > 5 [ fd 1 ]
-
-TO OLA :a :b :c repeat :a [ fd :b rt :c] END
-
-OLA 4 100 90
-
-home
-
-TO oLa :i :l while [ :i > 0 ]
-[
-fd :l rt 90
-make "i :i - 1
-make "l 1.75 * :l
-]
+TO tree :size
+   ifelse :size < 5 [forward :size back :size ]
+   [
+   make "b :size/3
+   setpencolor [255 0 0]
+   forward :b
+   make "a :size*0.666666666666
+   left 30 tree :a right 30
+   make "a :size/6
+   setpencolor [0 255 0]
+   forward :a
+   make "c :size/2
+   right 25 tree :c left 25
+   setpencolor [0 0 255]
+   forward :b
+   right 25 tree :c left 25
+   forward :a
+   back :size
+   ]
 END
-
-oLa 10 2
-
-home
-
-TO star
-  repeat 5 [ fd 100 rt 144 ]
-END
-star
+tree 150

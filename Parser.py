@@ -129,12 +129,12 @@ class Parser:
     def p_command8(self, p):
         """ command : pendown
                     | pd """
-        p[0] = Command("pendown", "")
+        p[0] = Command("pendown")
     
     def p_command9(self, p):
         """ command : penup
                     | pu """
-        p[0] = Command("penup", "")
+        p[0] = Command("penup")
     
     def p_command10(self, p):
         """ command : setpencolor '[' value value value ']' """
